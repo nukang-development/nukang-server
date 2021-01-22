@@ -39,29 +39,13 @@ class AdminController {
     })
       .then((data) => {
         res.status(201).json({
-          id: data.id,
+          id: data._id,
           email: data.email,
           name: data.name,
           location: data.location,
           category: data.category,
           price: data.price,
         });
-      })
-      .catch((err) => {
-        res.status(400).json({ message: "Internal Server Error" });
-      });
-  }
-
-  static updateTukang(req, res) {
-    AdminModel.updateOne({
-      id: req.params.id,
-      name: req.body.name,
-      location: req.body.location,
-      category: req.body.category,
-      price: req.body.price,
-    })
-      .then((data) => {
-        res.status(201).json(data.value);
       })
       .catch((err) => {
         res.status(400).json({ message: "Internal Server Error" });
