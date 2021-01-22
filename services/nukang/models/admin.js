@@ -10,26 +10,52 @@ class AdminModel {
       email: payload.email,
     });
   }
-  static create(payload) {
+  static register(payload) {
     let hashed = hash(payload.password);
     return Admin.insertOne({
       email: payload.email,
       password: hashed,
+      role: "admin",
     }).then((data) => {
       return data.ops[0];
     });
   }
-  static addTukang(payload) {
+  static createOne(payload) {
     let hashed = hash(payload.password);
     return Tukang.insertOne({
       email: payload.email,
       password: hashed,
-      location: "",
       name: "",
+      location: "",
       category: "",
-      price: "",
+      price: 0,
     }).then((data) => {
       return data.ops[0];
+    });
+  }
+
+  static updateOne(payload) {
+    return Tukang.findOneAndUpdate(
+      {
+        _id: ObjectId(payload.id),
+      },
+      {
+        $set: {
+          name: payload.name,
+          location: payload.location,
+          category: payload.category,
+          price: payload.price,
+        },
+      },
+      {
+        returnOriginal: false,
+      }
+    );
+  }
+
+  static deleteOne(id) {
+    return Tukang.findOneAndDelete({
+      _id: ObjectId(id),
     });
   }
 }
