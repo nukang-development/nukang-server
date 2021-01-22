@@ -19,6 +19,16 @@ class TukangController {
       });
   }
 
+  static findOneTukang(req, res) {
+    TukangModel.findOne(req.params.id)
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        res.status(400).json({ message: "Internal Server Error" });
+      });
+  }
+
   static loginTukang(req, res) {
     TukangModel.login({
       email: req.body.email,

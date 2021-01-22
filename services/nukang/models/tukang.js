@@ -27,6 +27,12 @@ class TukangModel {
       email: payload.email,
     });
   }
+
+  static findOne(id) {
+    return Tukang.findOne({
+      _id: ObjectId(id),
+    });
+  }
 }
 
 module.exports = TukangModel;
