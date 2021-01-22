@@ -8,50 +8,50 @@ class OrderController {
       schedule: req.body.schedule,
     })
       .then((data) => {
-        res.json(data);
+        res.status(201).json(data);
       })
       .catch((err) => {
-        res.send(err);
+        res.status(400).json({ message: "Internal Server Error" });
       });
   }
 
   static updateOrderStatus(req, res) {
     OrderModel.updateOne(req.params.id)
       .then((data) => {
-        res.json(data.value);
+        res.status(201).json(data.value);
       })
       .catch((err) => {
-        res.send(err);
+        res.status(400).json({ message: "Internal Server Error" });
       });
   }
 
   static findByUser(req, res) {
     OrderModel.findAllbyUser(req.params.id)
       .then((data) => {
-        res.json(data);
+        res.status(200).json(data);
       })
       .catch((err) => {
-        res.send(err);
+        res.status(400).json({ message: "Internal Server Error" });
       });
   }
 
   static findByTukang(req, res) {
     OrderModel.findAllbyTukang(req.params.id)
       .then((data) => {
-        res.json(data);
+        res.status(200).json(data);
       })
       .catch((err) => {
-        res.send(err);
+        res.status(400).json({ message: "Internal Server Error" });
       });
   }
 
   static findAllOrder(req, res) {
     OrderModel.findAll()
       .then((data) => {
-        res.json(data);
+        res.status(200).json(data);
       })
       .catch((err) => {
-        res.send(err);
+        res.status(400).json({ message: "Internal Server Error" });
       });
   }
 }

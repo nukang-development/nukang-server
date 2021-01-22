@@ -9,10 +9,10 @@ class UserController {
       password: req.body.password,
     })
       .then((data) => {
-        res.json(data);
+        res.status(200).json({ id: data._id, email: data.email });
       })
       .catch((err) => {
-        res.send(err);
+        res.status(400).json({ message: "Internal Server Error" });
       });
   }
 
@@ -25,11 +25,11 @@ class UserController {
           res.json({ message: "Invalid Account" });
         } else if (compare(req.body.password, data.password)) {
           const access_token = encode(data);
-          res.json(access_token);
+          res.status(200).json({ access_token: access_token });
         }
       })
       .catch((err) => {
-        res.send(err);
+        res.status(400).json({ message: "Internal Server Error" });
       });
   }
 }
