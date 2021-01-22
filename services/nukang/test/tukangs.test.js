@@ -10,7 +10,7 @@ let tukangId
 beforeAll(done => {
   let hashed = hash('thistukang')
   Tukang.insertOne({
-    email: 'john@mail.com', 
+    email: 'john@mail.com',
     password: hashed,
     name: "",
     location: "",
@@ -23,7 +23,7 @@ beforeAll(done => {
 })
 
 afterAll(done => {
-  Tukang.deleteOne({_id: ObjectID(tukangId)})
+  Tukang.deleteOne({ _id: ObjectID(tukangId) })
   done()
 })
 
@@ -80,6 +80,28 @@ describe('Update Tukang PUT /tukang/:id', () => {
             return done(err)
           }
           expect(status).toBe(201)
+          expect(body).toHaveProperty('name', 'Jone Slektemb')
+          expect(body).toHaveProperty('location', 'Kota Semarang')
+          expect(body).toHaveProperty('category', 'Tukang Bangunan')
+          expect(body).toHaveProperty('price', 100000)
+          done()
+        })
+    })
+  })
+})
+
+describe('Find One Tukang GET /tukang/:id', () => {
+  describe('Find Tukang Success', () => {
+    test('Response updated tukang', done => {
+      request(app)
+        .get('/tukang/' + tukangId)
+        .set('access_token', tukang_access_token)
+        .end((err, res) => {
+          const { body, status } = res
+          if (err) {
+            return done(err)
+          }
+          expect(status).toBe(200)
           expect(body).toHaveProperty('name', 'Jone Slektemb')
           expect(body).toHaveProperty('location', 'Kota Semarang')
           expect(body).toHaveProperty('category', 'Tukang Bangunan')
