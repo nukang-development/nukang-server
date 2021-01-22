@@ -89,25 +89,3 @@ describe('Update Tukang PUT /tukang/:id', () => {
     })
   })
 })
-
-describe('Find One Tukang PUT /tukang/:id', () => {
-  describe('Find Tukang Success', () => {
-    test('Response updated tukang', done => {
-      request(app)
-        .get('/tukang/' + tukangId)
-        .set('access_token', tukang_access_token)
-        .end((err, res) => {
-          const { body, status } = res
-          if (err) {
-            return done(err)
-          }
-          expect(status).toBe(200)
-          expect(body).toHaveProperty('name', 'Jone Slektemb')
-          expect(body).toHaveProperty('location', 'Kota Semarang')
-          expect(body).toHaveProperty('category', 'Tukang Bangunan')
-          expect(body).toHaveProperty('price', 100000)
-          done()
-        })
-    })
-  })
-})
