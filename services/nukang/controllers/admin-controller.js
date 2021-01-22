@@ -38,7 +38,14 @@ class AdminController {
       password: req.body.password,
     })
       .then((data) => {
-        res.status(201).json(data);
+        res.status(201).json({
+          id: data.id,
+          email: data.email,
+          name: data.name,
+          location: data.location,
+          category: data.category,
+          price: data.price,
+        });
       })
       .catch((err) => {
         res.status(400).json({ message: "Internal Server Error" });
