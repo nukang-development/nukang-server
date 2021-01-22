@@ -34,25 +34,6 @@ class AdminModel {
     });
   }
 
-  static updateOne(payload) {
-    return Tukang.findOneAndUpdate(
-      {
-        _id: ObjectId(payload.id),
-      },
-      {
-        $set: {
-          name: payload.name,
-          location: payload.location,
-          category: payload.category,
-          price: payload.price,
-        },
-      },
-      {
-        returnOriginal: false,
-      }
-    );
-  }
-
   static deleteOne(id) {
     return Tukang.findOneAndDelete({
       _id: ObjectId(id),
