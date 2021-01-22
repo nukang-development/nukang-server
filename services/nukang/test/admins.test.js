@@ -69,7 +69,6 @@ describe('Login Admin POST /admin/login', () => {
           if (err) {
             return done(err)
           }
-          access_token = res.body.id
           expect(status).toBe(400)
           expect(body).toHaveProperty('message', 'Invalid Account')
           done()
@@ -86,11 +85,7 @@ describe('Add Tukang POST /tukang', () => {
         .set('access_token', access_token)
         .send({
           email: 'john@mail.com',
-          password: 'thistukang',
-          name: 'Jone Slektemb',
-          location: 'Kota Semarang',
-          category: 'Tukang Bangunan',
-          price: 100000
+          password: 'thistukang'
         })
         .end((err, res) => {
           const { body, status } = res
@@ -101,10 +96,10 @@ describe('Add Tukang POST /tukang', () => {
           expect(status).toBe(201)
           expect(body).toHaveProperty('email', 'john@mail.com')
           expect(body).toHaveProperty('password', 'thistukang')
-          expect(body).toHaveProperty('name', 'Jone Slektemb')
-          expect(body).toHaveProperty('location', 'Kota Semarang')
-          expect(body).toHaveProperty('category', 'Tukang Bangunan')
-          expect(body).toHaveProperty('price', 100000)
+          expect(body).toHaveProperty('name', '')
+          expect(body).toHaveProperty('location', '')
+          expect(body).toHaveProperty('category', '')
+          expect(body).toHaveProperty('price', 0)
           done()
         })
     })
@@ -117,11 +112,7 @@ describe('Add Tukang POST /tukang', () => {
         .set('access_token', '')
         .send({
           email: 'john@mail.com',
-          password: 'thistukang',
-          name: 'Jone Slektemb',
-          location: 'Kota Semarang',
-          category: 'Tukang Bangunan',
-          price: 100000
+          password: 'thistukang'
         })
         .end((err, res) => {
           const { body, status } = res
