@@ -1,8 +1,15 @@
 const request = require('supertest')
 const app = require('../app')
+const db = require("../config/mongo");
+const Admin = db.collection("admin");
 
-let idTukang
-let access_token
+afterAll(done => {
+  Admin.drop()
+  done()
+})
+
+let tukangId
+let admin_access_token
 
 describe('Register Admin POST /admin/register', () => {
   describe('Register Admin Success', () => {
@@ -16,7 +23,24 @@ describe('Register Admin POST /admin/register', () => {
             return done(err)
           }
           expect(status).toBe(200)
-          expect(body).toHaveProperty('access_token', expect.any(String))
+          expect(body).toHaveProperty('id', expect.any(String))
+          expect(body).toHaveProperty('email', 'admin@mail.com')
+          done()
+        })
+    })
+  })
+
+  describe('Register Admin Failed', () => {
+    test('Response with error message', done => {
+      request(app)
+        .post('/admin/register')
+        .end((err, res) => {
+          const { body, status } = res
+          if (err) {
+            return done(err)
+          }
+          expect(status).toBe(500)
+          expect(body).toBeDefined()
           done()
         })
     })
@@ -34,7 +58,7 @@ describe('Login Admin POST /admin/login', () => {
           if (err) {
             return done(err)
           }
-          access_token = res.body.access_token
+          admin_access_token = res.body.access_token
           expect(status).toBe(200)
           expect(body).toHaveProperty('access_token', expect.any(String))
           done()
@@ -42,35 +66,16 @@ describe('Login Admin POST /admin/login', () => {
     })
   })
 
-  describe('Login Password Wrong', () => {
-    test('Response Invalid Email/Password', done => {
+  describe('Login Admin Failed', () => {
+    test('Response with error message', done => {
       request(app)
         .post('/admin/login')
-        .send({ email: 'admin1@mail.com', password: 'thiswrong' })
+        .send({ email: 'n@mail.com' })
         .end((err, res) => {
           const { body, status } = res
           if (err) {
             return done(err)
           }
-          expect(status).toBe(400)
-          expect(body).toHaveProperty('message', 'Invalid Email/Password')
-          done()
-        })
-    })
-  })
-
-  describe('Login Email/Password Empty', () => {
-    test('Response Invalid Account', done => {
-      request(app)
-        .post('/admin/login')
-        .send({ email: '', password: '' })
-        .end((err, res) => {
-          const { body, status } = res
-          if (err) {
-            return done(err)
-          }
-          access_token = res.body.id
-          expect(status).toBe(400)
           expect(body).toHaveProperty('message', 'Invalid Account')
           done()
         })
@@ -78,70 +83,40 @@ describe('Login Admin POST /admin/login', () => {
   })
 })
 
-describe('Add Tukang POST /tukang', () => {
+describe('Add Tukang POST /admin/tukang', () => {
   describe('Add Tukang Success', () => {
     test('Response added tukang', done => {
       request(app)
-        .post('/admin/create')
-        .set('access_token', access_token)
+        .post('/admin/tukang')
+        .set('access_token', admin_access_token)
         .send({
           email: 'john@mail.com',
-          password: 'thistukang',
-          name: 'Jone Slektemb',
-          location: 'Kota Semarang',
-          category: 'Tukang Bangunan',
-          price: 100000
+          password: 'thistukang'
         })
         .end((err, res) => {
           const { body, status } = res
           if (err) {
             return done(err)
           }
-          idTukang = res.body.id
           expect(status).toBe(201)
+          tukangId = res.body.id
           expect(body).toHaveProperty('email', 'john@mail.com')
-          expect(body).toHaveProperty('password', 'thistukang')
-          expect(body).toHaveProperty('name', 'Jone Slektemb')
-          expect(body).toHaveProperty('location', 'Kota Semarang')
-          expect(body).toHaveProperty('category', 'Tukang Bangunan')
-          expect(body).toHaveProperty('price', 100000)
-          done()
-        })
-    })
-  })
-
-  describe('Add Tukang Error No Token', () => {
-    test('Response Unauthorized Error Message', done => {
-      request(app)
-        .post('/admin/create')
-        .set('access_token', '')
-        .send({
-          email: 'john@mail.com',
-          password: 'thistukang',
-          name: 'Jone Slektemb',
-          location: 'Kota Semarang',
-          category: 'Tukang Bangunan',
-          price: 100000
-        })
-        .end((err, res) => {
-          const { body, status } = res
-          if (err) {
-            return done(err)
-          }
-          expect(status).toBe(401)
-          expect(body).toHaveProperty('message', 'Please Login First')
+          expect(body).toHaveProperty('name', '')
+          expect(body).toHaveProperty('location', '')
+          expect(body).toHaveProperty('category', '')
+          expect(body).toHaveProperty('price', 0)
           done()
         })
     })
   })
 })
 
-describe('Delete Tukang /tukang/:id', () => {
+describe('Delete Tukang /admin/tukang/:id', () => {
   describe('Delete Tukang Success', () => {
     test('Response delete tukang', done => {
       request(app)
-        .put('/tukang/' + idTukang)
-        .set('access_token', access_token)
+        .delete('/admin/tukang/' + tukangId)
+        .set('access_token', admin_access_token)
         .end((err, res) => {
           const { body, status } = res
           if (err) {
@@ -153,21 +128,43 @@ describe('Delete Tukang /tukang/:id', () => {
         })
     })
   })
-
-  describe('Delete Tukang Error No Token', () => {
-    test('Response Unauthorized Error Message', done => {
-      request(app)
-        .delete('/tukang/' + idTukang)
-        .set('access_token', '')
-        .end((err, res) => {
-          const { body, status } = res
-          if (err) {
-            return done(err)
-          }
-          expect(status).toBe(401)
-          expect(body).toHaveProperty('message', 'success delete')
-          done()
-        })
-    })
-  })
 })
+// describe('Find All Order Get /tukang', () => {
+//   describe('Get Order List Success', () => {
+//     test('Response with order list', done => {
+//       request(app)
+//         .get('/tukang/order')
+//         .set('access_token', tukang_access_token)
+//         .end((err, res) => {
+//           const { body, status } = res
+//           if (err) {
+//             return done(err)
+//           }
+//           expect(status).toBe(200)
+//           expect(body).toBeDefined()
+//           done()
+//         })
+//     })
+//   })
+// })
+
+// describe('Find Profile Get /tukang', () => {
+//   describe('Get Profile Tukang', () => {
+//     test('Response with profile tukang', done => {
+//       request(app)
+//         .get('/tukang/profile')
+//         .set('access_token', access_token)
+//         .end((err, res) => {
+//           const { body, status } = res
+//           if (err) {
+//             return done(err)
+//           }
+//           expect(status).toBe(200)
+//           expect(body).toBeDefined()
+//           done()
+//         })
+//     })
+//   })
+// })
+
+
