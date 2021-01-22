@@ -10,21 +10,18 @@ class AdminController {
       .then((data) => {
         console.log(data);
         if (!data) {
-          throw {
-            status: 401,
-            message: "Invalid Account",
-          };
+          res.json({ message: "Invalid Account" });
         } else if (compare(req.body.password, data.password)) {
           const access_token = encode(data);
           res.json(access_token);
         }
       })
       .catch((err) => {
-        console.log(err);
+        res.send(err);
       });
   }
   static registerAdmin(req, res) {
-    AdminModel.create({
+    AdminModel.register({
       email: req.body.email,
       password: req.body.password,
     })
@@ -32,12 +29,12 @@ class AdminController {
         res.json(data);
       })
       .catch((err) => {
-        console.log(err);
+        res.send(err);
       });
   }
 
   static createTukang(req, res) {
-    AdminModel.addTukang({
+    AdminModel.createOne({
       email: req.body.email,
       password: req.body.password,
     })
@@ -45,7 +42,33 @@ class AdminController {
         res.json(data);
       })
       .catch((err) => {
-        console.log(err);
+        res.send(err);
+      });
+  }
+
+  static updateTukang(req, res) {
+    AdminModel.updateOne({
+      id: req.params.id,
+      name: req.body.name,
+      location: req.body.location,
+      category: req.body.category,
+      price: req.body.price,
+    })
+      .then((data) => {
+        res.json(data.value);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  }
+
+  static deleteTukang(req, res) {
+    AdminModel.deleteOne(req.params.id)
+      .then((data) => {
+        res.json({ message: "success delete" });
+      })
+      .catch((err) => {
+        res.send(err);
       });
   }
 }
