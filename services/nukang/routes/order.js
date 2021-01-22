@@ -1,9 +1,10 @@
 const router = require("express").Router();
 const OrderController = require("../controllers/order-controller");
+const authentication = require("../middlewares/authentication");
 
-router.post("/", OrderController.createOrder);
-router.get("/user/:id", OrderController.findByUser);
-router.get("/tukang/:id", OrderController.findByTukang);
-router.get("/", OrderController.findAllOrder);
-router.put("/:id", OrderController.updateOrderStatus);
+router.post("/", authentication, OrderController.createOrder);
+router.get("/user/:id", authentication, OrderController.findByUser);
+router.get("/tukang/:id", authentication, OrderController.findByTukang);
+router.get("/", authentication, OrderController.findAllOrder);
+router.put("/:id", authentication, OrderController.updateOrderStatus);
 module.exports = router;

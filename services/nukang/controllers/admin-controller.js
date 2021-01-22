@@ -12,7 +12,7 @@ class AdminController {
           res.json({ message: "Invalid Account" });
         } else if (compare(req.body.password, data.password)) {
           const access_token = encode(data);
-          res.json(access_token);
+          res.status(200).json({ access_token: access_token });
         }
       })
       .catch((err) => {
@@ -25,10 +25,10 @@ class AdminController {
       password: req.body.password,
     })
       .then((data) => {
-        res.json(data);
+        res.status(200).json({ id: data._id, email: data.email });
       })
       .catch((err) => {
-        res.send(err);
+        res.status(400).json({ message: "Internal Server Error" });
       });
   }
 
@@ -38,10 +38,10 @@ class AdminController {
       password: req.body.password,
     })
       .then((data) => {
-        res.json(data);
+        res.status(201).json(data);
       })
       .catch((err) => {
-        res.send(err);
+        res.status(400).json({ message: "Internal Server Error" });
       });
   }
 
@@ -54,20 +54,20 @@ class AdminController {
       price: req.body.price,
     })
       .then((data) => {
-        res.json(data.value);
+        res.status(201).json(data.value);
       })
       .catch((err) => {
-        res.send(err);
+        res.status(400).json({ message: "Internal Server Error" });
       });
   }
 
   static deleteTukang(req, res) {
     AdminModel.deleteOne(req.params.id)
       .then((data) => {
-        res.json({ message: "success delete" });
+        res.status(200).json({ message: "success delete" });
       })
       .catch((err) => {
-        res.send(err);
+        res.status(400).json({ message: "Internal Server Error" });
       });
   }
 }
