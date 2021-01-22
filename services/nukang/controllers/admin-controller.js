@@ -8,7 +8,6 @@ class AdminController {
       email: req.body.email,
     })
       .then((data) => {
-        console.log(data);
         if (!data) {
           res.json({ message: "Invalid Account" });
         } else if (compare(req.body.password, data.password)) {
