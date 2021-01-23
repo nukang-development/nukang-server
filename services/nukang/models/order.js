@@ -15,12 +15,26 @@ class OrderModel {
     });
   }
 
-  static updateOne(id) {
+  static updateAccept(id) {
     return Order.findOneAndUpdate(
       { _id: ObjectId(id) },
       {
         $set: {
           status: "accepted",
+        },
+      },
+      {
+        returnOriginal: false,
+      }
+    );
+  }
+
+  static updateReject(id) {
+    return Order.findOneAndUpdate(
+      { _id: ObjectId(id) },
+      {
+        $set: {
+          status: "rejected",
         },
       },
       {

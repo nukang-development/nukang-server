@@ -11,17 +11,27 @@ class OrderController {
         res.status(201).json(data);
       })
       .catch((err) => {
-        next(err)
+        next(err);
       });
   }
 
-  static updateOrderStatus(req, res, next) {
-    OrderModel.updateOne(req.params.id)
+  static updateOrderAccepted(req, res, next) {
+    OrderModel.updateAccept(req.params.id)
       .then((data) => {
         res.status(201).json(data.value);
       })
       .catch((err) => {
-        next(err)
+        next(err);
+      });
+  }
+
+  static updateOrderRejected(req, res, next) {
+    OrderModel.updateReject(req.params.id)
+      .then((data) => {
+        res.status(201).json(data.value);
+      })
+      .catch((err) => {
+        next(err);
       });
   }
 
@@ -31,7 +41,7 @@ class OrderController {
         res.status(200).json(data);
       })
       .catch((err) => {
-        next(err)
+        next(err);
       });
   }
 
@@ -41,7 +51,7 @@ class OrderController {
         res.status(200).json(data);
       })
       .catch((err) => {
-        next(err)
+        next(err);
       });
   }
 
@@ -51,7 +61,7 @@ class OrderController {
         res.status(200).json(data);
       })
       .catch((err) => {
-        next(err)
+        next(err);
       });
   }
 }

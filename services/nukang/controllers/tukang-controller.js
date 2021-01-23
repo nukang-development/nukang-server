@@ -5,19 +5,21 @@ const imgur = require("imgur");
 
 class TukangController {
   static updateTukang(req, res) {
-    console.log(req.file, "<<<< ini sebelum upload");
-    const encodedImg = req.file.buffer.toString("base64");
+    console.log(req.files);
+    let encodedImgArray = [];
+    for (let i = 0; i < req.files.length; i++) {
+      encodedImgArray.push(req.files[i].buffer.toString("base64"));
+    }
     imgur
-      .uploadBase64(encodedImg)
-      .then((img) => {
-        console.log(img);
+      .uploadImages(encodedImgArray, "Base64")
+      .then((images) => {
         return TukangModel.updateOne({
           id: req.params.id,
           name: req.body.name,
           location: req.body.location,
           category: req.body.category,
           price: req.body.price,
-          portofolio_img: img.data.link,
+          portofolio_img: images,
         })
           .then((data) => {
             res.status(201).json({
@@ -33,6 +35,35 @@ class TukangController {
             res.status(400).json({ message: "Internal Server Error" });
           });
       })
+      .catch((err) => {
+        res.status(400).json({ message: "Internal Server Error" });
+      });
+
+    // const encodedImg = req.file.buffer.toString("base64");
+    // imgur.uploadBase64(encodedImg).then((img) => {
+    //   console.log(img);
+    //   return TukangModel.updateOne({
+    //     id: req.params.id,
+    //     name: req.body.name,
+    //     location: req.body.location,
+    //     category: req.body.category,
+    //     price: req.body.price,
+    //     portofolio_img: img.data.link,
+    //   })
+    //     .then((data) => {
+    //       res.status(201).json({
+    //         id: data.value._id,
+    //         name: data.value.name,
+    //         location: data.value.location,
+    //         category: data.value.category,
+    //         price: data.value.price,
+    //         portofolio_img: data.value.portofolio_img,
+    //       });
+    //     })
+    //     .catch((err) => {
+    //       res.status(400).json({ message: "Internal Server Error" });
+    //     });
+    // });
   }
 
   static findOneTukang(req, res, next) {
@@ -48,7 +79,7 @@ class TukangController {
         });
       })
       .catch((err) => {
-        next(err)
+        next(err);
       });
   }
 
@@ -60,15 +91,15 @@ class TukangController {
         if (!data) {
           throw {
             status: 400,
-            message: "Invalid Account"
-          }
+            message: "Invalid Account",
+          };
         } else if (compare(req.body.password, data.password)) {
           const access_token = encode(data);
           res.status(200).json({ access_token: access_token });
         }
       })
       .catch((err) => {
-        next(err)
+        next(err);
       });
   }
 }
