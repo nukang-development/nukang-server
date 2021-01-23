@@ -4,7 +4,7 @@ module.exports = (req, res, next) => {
     if (req.userData.role !== "admin") {
       throw {
         status: 401,
-        message: "Only Tukang",
+        message: "Only User",
       };
     } else {
       next();
