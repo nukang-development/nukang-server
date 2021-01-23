@@ -1,15 +1,13 @@
 module.exports = (req, res, next) => {
   try {
-    if (!req.userData) {
+    console.log(req.userData);
+    if (req.userData.role !== "admin") {
       throw {
         status: 401,
-        message: "Please Login First",
+        message: "Only Tukang",
       };
-    } else if (req.userData.role !== "user") {
-      throw {
-        status: 401,
-        message: "Only User",
-      };
+    } else {
+      next();
     }
   } catch (err) {
     next(err);
