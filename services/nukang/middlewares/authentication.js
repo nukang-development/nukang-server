@@ -6,14 +6,14 @@ module.exports = (req, res, next) => {
     if (!access_token) {
       throw {
         status: 401,
-        message: "Please Login First"
-      }
+        message: "Please Login First",
+      };
     } else {
       const decoded = decode(access_token);
       req.userData = decoded;
       next();
     }
   } catch (err) {
-    next(err)
+    next(err);
   }
 };

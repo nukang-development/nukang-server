@@ -1,4 +1,5 @@
 const TukangModel = require("../models/tukang");
+const OrderModel = require("../models/order");
 const { compare } = require("../helpers/bcrypt-helper");
 const { encode } = require("../helpers/jwt-helper");
 const imgur = require("imgur");
@@ -38,32 +39,6 @@ class TukangController {
       .catch((err) => {
         res.status(400).json({ message: "Internal Server Error" });
       });
-
-    // const encodedImg = req.file.buffer.toString("base64");
-    // imgur.uploadBase64(encodedImg).then((img) => {
-    //   console.log(img);
-    //   return TukangModel.updateOne({
-    //     id: req.params.id,
-    //     name: req.body.name,
-    //     location: req.body.location,
-    //     category: req.body.category,
-    //     price: req.body.price,
-    //     portofolio_img: img.data.link,
-    //   })
-    //     .then((data) => {
-    //       res.status(201).json({
-    //         id: data.value._id,
-    //         name: data.value.name,
-    //         location: data.value.location,
-    //         category: data.value.category,
-    //         price: data.value.price,
-    //         portofolio_img: data.value.portofolio_img,
-    //       });
-    //     })
-    //     .catch((err) => {
-    //       res.status(400).json({ message: "Internal Server Error" });
-    //     });
-    // });
   }
 
   static findOneTukang(req, res, next) {
@@ -97,6 +72,36 @@ class TukangController {
           const access_token = encode(data);
           res.status(200).json({ access_token: access_token });
         }
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+
+  static findByTukang(req, res, next) {
+    OrderModel.findAllbyTukang(req.params.id)
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+
+  static updateOrderAccepted(req, res, next) {
+    OrderModel.updateAccept(req.params.id)
+      .then((data) => {
+        res.status(201).json(data.value);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+
+  static updateOrderRejected(req, res, next) {
+    OrderModel.updateReject(req.params.id)
+      .then((data) => {
+        res.status(201).json(data.value);
       })
       .catch((err) => {
         next(err);
