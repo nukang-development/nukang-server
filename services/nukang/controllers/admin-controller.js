@@ -3,36 +3,39 @@ const { compare } = require("../helpers/bcrypt-helper");
 const { encode } = require("../helpers/jwt-helper");
 
 class AdminController {
-  static loginAdmin(req, res) {
+  static loginAdmin(req, res, next) {
     AdminModel.login({
       email: req.body.email,
     })
       .then((data) => {
         if (!data) {
-          res.json({ message: "Invalid Account" });
+          throw {
+            status: 400,
+            message: "Invalid Account"
+          }
         } else if (compare(req.body.password, data.password)) {
           const access_token = encode(data);
           res.status(200).json({ access_token: access_token });
         }
       })
       .catch((err) => {
-        res.send(err);
+        next(err)
       });
   }
-  static registerAdmin(req, res) {
+  static registerAdmin(req, res, next) {
     AdminModel.register({
       email: req.body.email,
       password: req.body.password,
     })
       .then((data) => {
-        res.status(200).json({ id: data._id, email: data.email });
+        res.status(201).json({ id: data._id, email: data.email });
       })
       .catch((err) => {
-        res.status(400).json({ message: "Internal Server Error" });
+        next(err)
       });
   }
 
-  static createTukang(req, res) {
+  static createTukang(req, res, next) {
     AdminModel.createOne({
       email: req.body.email,
       password: req.body.password,
@@ -49,17 +52,17 @@ class AdminController {
         });
       })
       .catch((err) => {
-        res.status(400).json({ message: "Internal Server Error" });
+        next(err)
       });
   }
 
-  static deleteTukang(req, res) {
+  static deleteTukang(req, res, next) {
     AdminModel.deleteOne(req.params.id)
       .then((data) => {
         res.status(200).json({ message: "success delete" });
       })
       .catch((err) => {
-        res.status(400).json({ message: "Internal Server Error" });
+        next(err)
       });
   }
 }

@@ -33,13 +33,12 @@ afterAll(done => {
   done()
 })
 
-
 describe('Register User POST /user/register', () => {
   describe('Register User Success', () => {
     test('Response with access token', done => {
       request(app)
         .post('/user/register')
-        .send({ name: 'user1', email: 'user1@mail.com', password: 'thisuser' })
+        .send({ email: 'user1@mail.com', password: 'thisuser' })
         .end((err, res) => {
           const { body, status } = res
           if (err) {
@@ -74,20 +73,38 @@ describe('Login User POST /user/login', () => {
     })
   })
 
-  describe('Login User Failed', () => {
+  describe('Login User Failed Invalid Account', () => {
     test('Response with error message', done => {
       request(app)
         .post('/user/login')
-        .send({ email: 'n@mail.com' })
+        .send({ email: 'n@mail.com', password: 'thiswrong' })
         .end((err, res) => {
           const { body, status } = res
           if (err) {
             return done(err)
           }
+          expect(status).toBe(400)
           expect(body).toHaveProperty('message', 'Invalid Account')
           done()
         })
     })
+
+    describe('Login User Failed', () => {
+      test('Response with error message', done => {
+        request(app)
+          .post('/user/login')
+          .send({ email: 'n@mail.com' })
+          .end((err, res) => {
+            const { body, status } = res
+            if (err) {
+              return done(err)
+            }
+            expect(body).toHaveProperty('message', 'Invalid Account')
+            done()
+          })
+      })
+    })
+
   })
 })
 
@@ -118,9 +135,30 @@ describe('Add Order POST /order', () => {
         })
     })
   })
+
+  describe('Add Order List Failed No Access Token', () => {
+    test('Response with error message', done => {
+      request(app)
+        .post('/order/')
+        .send({
+          userId: idUser,
+          tukangId: idTukang,
+          schedule: "09.00"
+        })
+        .end((err, res) => {
+          const { body, status } = res
+          if (err) {
+            return done(err)
+          }
+          expect(status).toBe(401)
+          expect(body).toHaveProperty('message', 'Please Login First')
+          done()
+        })
+    })
+  })
 })
 
-describe('Update  Order Put /order', () => {
+describe('Update Order Put /order', () => {
   describe('Add Order List Success', () => {
     test('Response with order list', done => {
       request(app)
@@ -144,6 +182,25 @@ describe('Update  Order Put /order', () => {
         })
     })
   })
+
+  describe('Add Order List Failed No Access Token', () => {
+    test('Response with error message', done => {
+      request(app)
+        .put('/order/' + idOrder)
+        .send({
+          status: "accepted"
+        })
+        .end((err, res) => {
+          const { body, status } = res
+          if (err) {
+            return done(err)
+          }
+          expect(status).toBe(401)
+          expect(body).toHaveProperty('message', 'Please Login First')
+          done()
+        })
+    })
+  })
 })
 
 describe('Find All Order Get /order', () => {
@@ -163,9 +220,25 @@ describe('Find All Order Get /order', () => {
         })
     })
   })
+
+  describe('Get Order List Failed No Access Token', () => {
+    test('Response with error message', done => {
+      request(app)
+        .get('/order')
+        .end((err, res) => {
+          const { body, status } = res
+          if (err) {
+            return done(err)
+          }
+          expect(status).toBe(401)
+          expect(body).toHaveProperty('message', 'Please Login First')
+          done()
+        })
+    })
+  })
 })
 
-describe('Find By Id Tukang Get /order', () => {
+describe('Find All by Tukang Get /order', () => {
   describe('Get Order List Success', () => {
     test('Response with order list', done => {
       request(app)
@@ -186,9 +259,25 @@ describe('Find By Id Tukang Get /order', () => {
         })
     })
   })
+
+  describe('Get Order List Failed', () => {
+    test('Response with error message', done => {
+      request(app)
+        .get('/order/tukang/' + idTukang)
+        .end((err, res) => {
+          const { body, status } = res
+          if (err) {
+            return done(err)
+          }
+          expect(status).toBe(401)
+          expect(body).toHaveProperty('message', 'Please Login First')
+          done()
+        })
+    })
+  })
 })
 
-describe('Find By Id User Get /order', () => {
+describe('Find All by User Get /order', () => {
   describe('Get Order List Success', () => {
     test('Response with order list', done => {
       request(app)
@@ -205,6 +294,22 @@ describe('Find By Id User Get /order', () => {
           expect(body[0]).toHaveProperty('tukangId', expect.any(String))
           expect(body[0]).toHaveProperty('schedule', "09.00")
           expect(body[0]).toHaveProperty('status', 'accepted')
+          done()
+        })
+    })
+  })
+
+  describe('Get Order List Failed No Access Token', () => {
+    test('Response with order list', done => {
+      request(app)
+        .get('/order/user/' + idUser)
+        .end((err, res) => {
+          const { body, status } = res
+          if (err) {
+            return done(err)
+          }
+          expect(status).toBe(401)
+          expect(body).toHaveProperty('message', 'Please Login First')
           done()
         })
     })
