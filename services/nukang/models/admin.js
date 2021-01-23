@@ -29,7 +29,7 @@ class AdminModel {
       location: "",
       category: "",
       price: 0,
-      portofolio_img: "https://www.btklsby.go.id/images/placeholder/basic.png",
+      portofolio_img: [],
     }).then((data) => {
       return data.ops[0];
     });
