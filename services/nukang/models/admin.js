@@ -25,6 +25,7 @@ class AdminModel {
     return Tukang.insertOne({
       email: payload.email,
       password: hashed,
+      role: "tukang",
       name: "",
       location: "",
       category: "",
@@ -32,6 +33,12 @@ class AdminModel {
       portofolio_img: [],
     }).then((data) => {
       return data.ops[0];
+    });
+  }
+
+  static findOne(id) {
+    return Admin.findOne({
+      _id: ObjectId(id),
     });
   }
 

@@ -1,4 +1,5 @@
 const AdminModel = require("../models/admin");
+const OrderModel = require("../models/order");
 const { compare } = require("../helpers/bcrypt-helper");
 const { encode } = require("../helpers/jwt-helper");
 
@@ -11,15 +12,15 @@ class AdminController {
         if (!data) {
           throw {
             status: 400,
-            message: "Invalid Account"
-          }
+            message: "Invalid Account",
+          };
         } else if (compare(req.body.password, data.password)) {
           const access_token = encode(data);
           res.status(200).json({ access_token: access_token });
         }
       })
       .catch((err) => {
-        next(err)
+        next(err);
       });
   }
   static registerAdmin(req, res, next) {
@@ -31,7 +32,7 @@ class AdminController {
         res.status(201).json({ id: data._id, email: data.email });
       })
       .catch((err) => {
-        next(err)
+        next(err);
       });
   }
 
@@ -44,6 +45,7 @@ class AdminController {
         res.status(201).json({
           id: data._id,
           email: data.email,
+          role: data.role,
           name: data.name,
           location: data.location,
           category: data.category,
@@ -52,7 +54,7 @@ class AdminController {
         });
       })
       .catch((err) => {
-        next(err)
+        next(err);
       });
   }
 
@@ -62,7 +64,17 @@ class AdminController {
         res.status(200).json({ message: "success delete" });
       })
       .catch((err) => {
-        next(err)
+        next(err);
+      });
+  }
+
+  static findAllOrder(req, res, next) {
+    OrderModel.findAll()
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        next(err);
       });
   }
 }

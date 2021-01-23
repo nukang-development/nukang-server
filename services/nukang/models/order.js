@@ -1,6 +1,5 @@
 const db = require("../config/mongo");
 const Order = db.collection("orders");
-const Tukang = db.collection("tukangs");
 const { ObjectId } = require("mongodb");
 
 class OrderModel {
