@@ -31,14 +31,8 @@ describe('Register Admin POST /admin/register', () => {
   describe('Register Admin Failed', () => {
     test('Response with error message', async done => {
       try {
-        jest.mock('request')
-        request(app).post.mockRejectedValue('/admin/register')
-        const res = await {
-          status: 404,
-          message: "error"
-        }
-
-        const {body, status} = res
+        const res = await request(app).post('/admin/register')
+        const { body, status } = res
         expect(status).toBe(500)
         expect(body).toBeDefined()
         done()
