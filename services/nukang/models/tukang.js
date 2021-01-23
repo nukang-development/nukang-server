@@ -14,6 +14,7 @@ class TukangModel {
           location: payload.location,
           category: payload.category,
           price: payload.price,
+          portofolio_img: payload.portofolio_img,
         },
       },
       {
