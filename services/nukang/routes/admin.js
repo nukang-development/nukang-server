@@ -17,11 +17,6 @@ router.post(
   authorization_admin,
   AdminController.createTukang
 );
-router.delete(
-  "/tukang/:id",
-  authentication,
-  authorization_admin,
-  AdminController.deleteTukang
-);
+router.delete("/tukang/:id", authentication, AdminController.deleteTukang);
 
 module.exports = router;
