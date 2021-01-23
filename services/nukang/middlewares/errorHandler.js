@@ -5,6 +5,5 @@ module.exports = (err, req, res, next) => {
     });
   } else {
     res.status(500).json(err);
-    console.log(err);
   }
 };

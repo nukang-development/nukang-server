@@ -3,7 +3,7 @@ const { compare } = require("../helpers/bcrypt-helper");
 const { encode } = require("../helpers/jwt-helper");
 
 class TukangController {
-  static updateTukang(req, res) {
+  static updateTukang(req, res, next) {
     TukangModel.updateOne({
       id: req.params.id,
       name: req.body.name,
@@ -12,37 +12,40 @@ class TukangController {
       price: req.body.price,
     })
       .then((data) => {
-        res.status(201).json(data.value);
+        res.status(200).json(data.value);
       })
       .catch((err) => {
-        res.status(400).json({ message: "Internal Server Error" });
+        next(err)
       });
   }
 
-  static findOneTukang(req, res) {
+  static findOneTukang(req, res, next) {
     TukangModel.findOne(req.params.id)
       .then((data) => {
         res.status(200).json(data);
       })
       .catch((err) => {
-        res.status(400).json({ message: "Internal Server Error" });
+        next(err)
       });
   }
 
-  static loginTukang(req, res) {
+  static loginTukang(req, res, next) {
     TukangModel.login({
       email: req.body.email,
     })
       .then((data) => {
         if (!data) {
-          res.json({ message: "Invalid Account" });
+          throw {
+            status: 400,
+            message: "Invalid Account"
+          }
         } else if (compare(req.body.password, data.password)) {
           const access_token = encode(data);
           res.status(200).json({ access_token: access_token });
         }
       })
       .catch((err) => {
-        res.status(400).json({ message: "Internal Server Error" });
+        next(err)
       });
   }
 }

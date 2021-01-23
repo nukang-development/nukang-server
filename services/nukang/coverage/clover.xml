@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1611356913584" clover="3.2.0">
-  <project timestamp="1611356913584" name="All files">
-    <metrics statements="186" coveredstatements="166" conditionals="16" coveredconditionals="11" methods="66" coveredmethods="49" elements="268" coveredelements="226" complexity="0" loc="186" ncloc="186" packages="7" files="19" classes="19"/>
+<coverage generated="1611378048792" clover="3.2.0">
+  <project timestamp="1611378048792" name="All files">
+    <metrics statements="185" coveredstatements="174" conditionals="16" coveredconditionals="13" methods="66" coveredmethods="55" elements="267" coveredelements="242" complexity="0" loc="185" ncloc="185" packages="7" files="19" classes="19"/>
     <package name="nukang">
       <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="app.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/app.js">
@@ -32,29 +32,29 @@
       </file>
     </package>
     <package name="nukang.controllers">
-      <metrics statements="68" coveredstatements="52" conditionals="12" coveredconditionals="9" methods="42" coveredmethods="26"/>
+      <metrics statements="68" coveredstatements="57" conditionals="12" coveredconditionals="9" methods="42" coveredmethods="31"/>
       <file name="admin-controller.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/controllers/admin-controller.js">
-        <metrics statements="20" coveredstatements="16" conditionals="4" coveredconditionals="3" methods="12" coveredmethods="8"/>
+        <metrics statements="20" coveredstatements="17" conditionals="4" coveredconditionals="3" methods="12" coveredmethods="9"/>
         <line num="1" count="3" type="stmt"/>
         <line num="2" count="3" type="stmt"/>
         <line num="3" count="3" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
         <line num="11" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="12" count="1" type="stmt"/>
-        <line num="13" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="14" count="1" type="stmt"/>
-        <line num="15" count="1" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="23" count="2" type="stmt"/>
-        <line num="28" count="1" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="36" count="1" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="56" count="1" type="stmt"/>
-        <line num="58" count="1" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="66" count="3" type="stmt"/>
+        <line num="16" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="69" count="3" type="stmt"/>
       </file>
       <file name="order-controller.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/controllers/order-controller.js">
         <metrics statements="17" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="15" coveredmethods="10"/>
@@ -77,41 +77,41 @@
         <line num="59" count="3" type="stmt"/>
       </file>
       <file name="tukang-controller.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/controllers/tukang-controller.js">
-        <metrics statements="17" coveredstatements="12" conditionals="4" coveredconditionals="3" methods="9" coveredmethods="4"/>
+        <metrics statements="17" coveredstatements="15" conditionals="4" coveredconditionals="3" methods="9" coveredmethods="7"/>
         <line num="1" count="3" type="stmt"/>
         <line num="2" count="3" type="stmt"/>
         <line num="3" count="3" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="33" count="2" type="stmt"/>
-        <line num="37" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="38" count="1" type="stmt"/>
-        <line num="39" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="40" count="1" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="50" count="3" type="stmt"/>
+        <line num="33" count="3" type="stmt"/>
+        <line num="37" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="42" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="48" count="2" type="stmt"/>
+        <line num="53" count="3" type="stmt"/>
       </file>
       <file name="user-controller.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/controllers/user-controller.js">
-        <metrics statements="14" coveredstatements="12" conditionals="4" coveredconditionals="3" methods="6" coveredmethods="4"/>
+        <metrics statements="14" coveredstatements="13" conditionals="4" coveredconditionals="3" methods="6" coveredmethods="5"/>
         <line num="1" count="3" type="stmt"/>
         <line num="2" count="3" type="stmt"/>
         <line num="3" count="3" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
-        <line num="20" count="2" type="stmt"/>
-        <line num="24" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="25" count="1" type="stmt"/>
-        <line num="26" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="27" count="1" type="stmt"/>
-        <line num="28" count="1" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="37" count="3" type="stmt"/>
+        <line num="20" count="3" type="stmt"/>
+        <line num="24" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="29" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="40" count="3" type="stmt"/>
       </file>
     </package>
     <package name="nukang.helpers">
@@ -132,31 +132,30 @@
       </file>
     </package>
     <package name="nukang.middlewares">
-      <metrics statements="15" coveredstatements="12" conditionals="4" coveredconditionals="2" methods="2" coveredmethods="2"/>
+      <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
       <file name="authentication.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/middlewares/authentication.js">
-        <metrics statements="10" coveredstatements="8" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+        <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="1" count="3" type="stmt"/>
         <line num="3" count="3" type="stmt"/>
-        <line num="4" count="7" type="stmt"/>
-        <line num="5" count="7" type="stmt"/>
-        <line num="6" count="7" type="cond" truecount="1" falsecount="1"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="11" count="7" type="stmt"/>
+        <line num="4" count="15" type="stmt"/>
+        <line num="5" count="15" type="stmt"/>
+        <line num="6" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="7" count="8" type="stmt"/>
         <line num="12" count="7" type="stmt"/>
         <line num="13" count="7" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
+        <line num="14" count="7" type="stmt"/>
+        <line num="17" count="8" type="stmt"/>
       </file>
       <file name="errorHandler.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/middlewares/errorHandler.js">
-        <metrics statements="5" coveredstatements="4" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+        <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="1" count="3" type="stmt"/>
-        <line num="2" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="3" count="0" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
+        <line num="2" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="3" count="13" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
       </file>
     </package>
     <package name="nukang.models">
-      <metrics statements="40" coveredstatements="39" conditionals="0" coveredconditionals="0" methods="18" coveredmethods="17"/>
+      <metrics statements="40" coveredstatements="40" conditionals="0" coveredconditionals="0" methods="18" coveredmethods="18"/>
       <file name="admin.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/models/admin.js">
         <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="6"/>
         <line num="1" count="3" type="stmt"/>
@@ -189,13 +188,13 @@
         <line num="45" count="3" type="stmt"/>
       </file>
       <file name="tukang.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/models/tukang.js">
-        <metrics statements="7" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2"/>
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
         <line num="1" count="3" type="stmt"/>
         <line num="2" count="3" type="stmt"/>
         <line num="3" count="3" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
-        <line num="26" count="2" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
+        <line num="26" count="3" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
         <line num="38" count="3" type="stmt"/>
       </file>
       <file name="users.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/models/users.js">
@@ -206,7 +205,7 @@
         <line num="7" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
         <line num="13" count="1" type="stmt"/>
-        <line num="18" count="2" type="stmt"/>
+        <line num="18" count="3" type="stmt"/>
         <line num="24" count="3" type="stmt"/>
       </file>
     </package>

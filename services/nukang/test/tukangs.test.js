@@ -45,6 +45,24 @@ describe('Login Tukang POST /tukang/login', () => {
         })
     })
   })
+
+  describe('Login Tukang Failed Invalid Account', () => {
+    test('Response with error message', done => {
+      request(app)
+        .post('/tukang/login')
+        .send({ email: 'n@mail.com', password: 'thiswrong' })
+        .end((err, res) => {
+          const { body, status } = res
+          if (err) {
+            return done(err)
+          }
+          expect(status).toBe(400)
+          expect(body).toHaveProperty('message', 'Invalid Account')
+          done()
+        })
+    })
+  })
+
   describe('Login Tukang Failed', () => {
     test('Response with error message', done => {
       request(app)
@@ -79,7 +97,7 @@ describe('Update Tukang PUT /tukang/:id', () => {
           if (err) {
             return done(err)
           }
-          expect(status).toBe(201)
+          expect(status).toBe(200)
           expect(body).toHaveProperty('name', 'Jone Slektemb')
           expect(body).toHaveProperty('location', 'Kota Semarang')
           expect(body).toHaveProperty('category', 'Tukang Bangunan')
@@ -106,6 +124,23 @@ describe('Find One Tukang GET /tukang/:id', () => {
           expect(body).toHaveProperty('location', 'Kota Semarang')
           expect(body).toHaveProperty('category', 'Tukang Bangunan')
           expect(body).toHaveProperty('price', 100000)
+          done()
+        })
+    })
+  })
+
+  describe('Find Tukang Failed', () => {
+    test('Response error not found', done => {
+      request(app)
+        .get('/tukang/' + "wrongId")
+        .set('access_token', tukang_access_token)
+        .end((err, res) => {
+          const { body, status } = res
+          if (err) {
+            return done(err)
+          }
+          expect(status).toBe(500)
+          expect(body).toBeDefined()
           done()
         })
     })
