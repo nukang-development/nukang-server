@@ -45,6 +45,7 @@ class AdminController {
           location: data.location,
           category: data.category,
           price: data.price,
+          portofolio_img: data.portofolio_img,
         });
       })
       .catch((err) => {
