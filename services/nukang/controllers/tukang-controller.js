@@ -5,8 +5,8 @@ const { encode } = require("../helpers/jwt-helper");
 const imgur = require("imgur");
 
 class TukangController {
+  // update profile tukang
   static updateTukang(req, res) {
-    console.log(req.files);
     let encodedImgArray = [];
     for (let i = 0; i < req.files.length; i++) {
       encodedImgArray.push(req.files[i].buffer.toString("base64"));
@@ -41,6 +41,7 @@ class TukangController {
       });
   }
 
+  // get data profile tukang
   static findOneTukang(req, res, next) {
     TukangModel.findOne(req.params.id)
       .then((data) => {
@@ -49,7 +50,12 @@ class TukangController {
           name: data.name,
           location: data.location,
           category: data.category,
-          price: data.price,
+          small_project_desc: data.small_project_desc,
+          small_project_price: data.small_project_price,
+          medium_project_desc: data.medium_project_desc,
+          medim_project_price: data.medium_project_price,
+          big_project_desc: data.big_project_desc,
+          big_project_price: data.big_project_price,
           portofolio_img: data.portofolio_img,
         });
       })
@@ -78,6 +84,7 @@ class TukangController {
       });
   }
 
+  // get data order yang memiliki id tukang
   static findByTukang(req, res, next) {
     OrderModel.findAllbyTukang(req.params.id)
       .then((data) => {
