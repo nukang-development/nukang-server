@@ -36,12 +36,6 @@ class AdminModel {
     });
   }
 
-  static findOne(id) {
-    return Admin.findOne({
-      _id: ObjectId(id),
-    });
-  }
-
   static deleteOne(id) {
     return Tukang.findOneAndDelete({
       _id: ObjectId(id),

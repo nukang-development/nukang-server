@@ -1,7 +1,6 @@
 module.exports = (req, res, next) => {
   try {
-    console.log(req.userData);
-    if (req.userData.role !== "admin") {
+    if (req.userData.role !== "tukang") {
       throw {
         status: 401,
         message: "Only Tukang",
