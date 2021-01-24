@@ -29,7 +29,12 @@ class AdminModel {
       name: "",
       location: "",
       category: "",
-      price: 0,
+      small_project_desc: "",
+      small_project_price: 0,
+      medium_project_desc: "",
+      medim_project_price: 0,
+      big_project_desc: "",
+      big_project_price: 0,
       portofolio_img: [],
     }).then((data) => {
       return data.ops[0];

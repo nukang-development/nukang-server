@@ -124,11 +124,16 @@ describe('Add Tukang POST /admin/tukang', () => {
         const { body, status } = res
         expect(status).toBe(201)
         tukangId = res.body.id
+        expect(body).toHaveProperty('id', tukangId)
         expect(body).toHaveProperty('email', 'john@mail.com')
+        expect(body).toHaveProperty('role', 'tukang')
         expect(body).toHaveProperty('name', '')
         expect(body).toHaveProperty('location', '')
         expect(body).toHaveProperty('category', '')
-        expect(body).toHaveProperty('price', 0)
+        expect(body).toHaveProperty('small_project_price', 0)
+        expect(body).toHaveProperty('big_project_price', 0)
+        expect(body).toHaveProperty('portofolio_img', [])
+
         done()
       } catch (error) {
         done(error)
