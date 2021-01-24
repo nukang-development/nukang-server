@@ -7,6 +7,7 @@ const imgur = require("imgur");
 class TukangController {
   // update profile tukang
   static updateTukang(req, res) {
+    (req.files);
     let encodedImgArray = [];
     for (let i = 0; i < req.files.length; i++) {
       encodedImgArray.push(req.files[i].buffer.toString("base64"));
@@ -41,10 +42,10 @@ class TukangController {
       });
   }
 
-  // get data profile tukang
-  static findOneTukang(req, res, next) {
-    TukangModel.findOne(req.params.id)
-      .then((data) => {
+  static async findOneTukang(req, res, next) {
+    try {
+      if (!Number(req.params.id)) {
+        const data = await TukangModel.findOne(req.params.id)
         res.status(200).json({
           id: data._id,
           name: data.name,
@@ -58,10 +59,16 @@ class TukangController {
           big_project_price: data.big_project_price,
           portofolio_img: data.portofolio_img,
         });
-      })
-      .catch((err) => {
-        next(err);
-      });
+      } else {
+        throw {
+          status: 404,
+          message: "Error Not Found"
+        }
+      }
+    } catch (error) {
+      next(error)
+    }
+
   }
 
   static loginTukang(req, res, next) {
@@ -84,35 +91,52 @@ class TukangController {
       });
   }
 
-  // get data order yang memiliki id tukang
-  static findByTukang(req, res, next) {
-    OrderModel.findAllbyTukang(req.params.id)
-      .then((data) => {
-        res.status(200).json(data);
-      })
-      .catch((err) => {
-        next(err);
-      });
+  static async findByTukang(req, res, next) {
+    try {
+      if (!Number(req.params.id)) {
+        const data = await OrderModel.findAllbyTukang(req.params.id)
+        res.status(200).json(data)
+      } else {
+        throw {
+          status: 404,
+          message: "Error Not Found"
+        }
+      }
+    } catch (error) {
+      next(error);
+    }
   }
 
-  static updateOrderAccepted(req, res, next) {
-    OrderModel.updateAccept(req.params.id)
-      .then((data) => {
-        res.status(201).json(data.value);
-      })
-      .catch((err) => {
-        next(err);
-      });
+  static async updateOrderAccepted(req, res, next) {
+    try {
+      if (!Number(req.params.id)) {
+        const data = await OrderModel.updateAccept(req.params.id)
+        res.status(200).json(data.value);
+      } else {
+        throw {
+          status: 404,
+          message: "Error Not Found"
+        }
+      }
+    } catch (error) {
+      next(error)
+    }
   }
 
-  static updateOrderRejected(req, res, next) {
-    OrderModel.updateReject(req.params.id)
-      .then((data) => {
-        res.status(201).json(data.value);
-      })
-      .catch((err) => {
-        next(err);
-      });
+  static async updateOrderRejected(req, res, next) {
+    try {
+      if (!Number(req.params.id)) {
+        const data = await OrderModel.updateReject(req.params.id)
+        res.status(200).json(data.value);
+      } else {
+        throw {
+          status: 404,
+          message: "Error Not Found"
+        }
+      }
+    } catch (error) {
+      next(error)
+    }
   }
 }
 

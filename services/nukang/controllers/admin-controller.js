@@ -23,25 +23,38 @@ class AdminController {
         next(err);
       });
   }
-  static registerAdmin(req, res, next) {
-    AdminModel.register({
-      email: req.body.email,
-      password: req.body.password,
-    })
-      .then((data) => {
+  static async registerAdmin(req, res, next) {
+    try {
+      if (req.body.email === "") {
+        throw {
+          status: 400,
+          message: "Please Fill Email"
+        }
+      } else {
+        const data = await AdminModel.register({
+          email: req.body.email,
+          password: req.body.password,
+        })
         res.status(201).json({ id: data._id, email: data.email });
-      })
-      .catch((err) => {
-        next(err);
-      });
+      }
+    } catch (error) {
+      next(error)
+    }
+
   }
 
-  static createTukang(req, res, next) {
-    AdminModel.createOne({
-      email: req.body.email,
-      password: req.body.password,
-    })
-      .then((data) => {
+  static async createTukang(req, res, next) {
+    try {
+      if (req.body.email === "") {
+        throw {
+          status: 400,
+          message: "Please Fill Email"
+        }
+      } else {
+        const data = await AdminModel.createOne({
+          email: req.body.email,
+          password: req.body.password,
+        })
         res.status(201).json({
           id: data._id,
           email: data.email,
@@ -57,20 +70,27 @@ class AdminController {
           big_project_price: data.big_project_price,
           portofolio_img: data.portofolio_img,
         });
-      })
-      .catch((err) => {
-        next(err);
-      });
+      }
+    } catch (error) {
+      next(error)
+    }
+
   }
 
-  static deleteTukang(req, res, next) {
-    AdminModel.deleteOne(req.params.id)
-      .then((data) => {
+  static async deleteTukang(req, res, next) {
+    try {
+      if (!Number(req.params.id)) {
+        const data = await AdminModel.deleteOne(req.params.id)
         res.status(200).json({ message: "success delete" });
-      })
-      .catch((err) => {
-        next(err);
-      });
+      } else {
+        throw {
+          status: 404,
+          message: "Error Not Found"
+        }
+      }
+    } catch (error) {
+      next(error)
+    }
   }
 
   static findAllOrder(req, res, next) {

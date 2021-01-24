@@ -5,17 +5,23 @@ const { compare } = require("../helpers/bcrypt-helper");
 const { encode } = require("../helpers/jwt-helper");
 
 class UserController {
-  static registerUser(req, res, next) {
-    UserModel.register({
-      email: req.body.email,
-      password: req.body.password,
-    })
-      .then((data) => {
-        res.status(200).json({ id: data._id, email: data.email });
-      })
-      .catch((err) => {
-        next(err);
-      });
+  static async registerUser(req, res, next) {
+    try {
+      if (req.body.email === "") {
+        throw {
+          status: 400,
+          message: "Please Fill Email"
+        }
+      } else {
+        const data = await UserModel.register({
+          email: req.body.email,
+          password: req.body.password,
+        })
+        res.status(201).json({ id: data._id, email: data.email });
+      }
+    } catch (error) {
+      next(error)
+    }
   }
 
   static loginUser(req, res, next) {
@@ -38,33 +44,43 @@ class UserController {
       });
   }
 
-  // user bikin order
-  static createOrder(req, res, next) {
-    OrderModel.createOne({
-      userId: req.body.userId,
-      tukangId: req.body.tukangId,
-      schedule: req.body.schedule,
-      contact: req.body.contact,
-      address: req.body.address,
-      total_price: req.body.total_price,
-    })
-      .then((data) => {
+  static async createOrder(req, res, next) {
+    try {
+      if (req.body.userId) {
+        const data = await OrderModel.createOne({
+          userId: req.body.userId,
+          tukangId: req.body.tukangId,
+          schedule: req.body.schedule,
+          contact: req.body.contact,
+          address: req.body.address,
+          total_price: req.body.total_price,
+        })
         res.status(201).json(data);
-      })
-      .catch((err) => {
-        next(err);
-      });
+      } else {
+        throw {
+          status: 400,
+          message: "User ID required"
+        }
+      }
+    } catch (error) {
+      next(error)
+    }
   }
 
-  // get  data orderan yang memiliki id user
-  static findByUser(req, res, next) {
-    OrderModel.findAllbyUser(req.params.id)
-      .then((data) => {
+  static async findByUser(req, res, next) {
+    try {
+      if (!Number(req.params.id)) {
+        const data = await OrderModel.findAllbyUser(req.params.id)
         res.status(200).json(data);
-      })
-      .catch((err) => {
-        next(err);
-      });
+      } else {
+        throw {
+          status: 404,
+          message: "Error Not Found"
+        }
+      }
+    } catch (error) {
+      next(error)
+    }
   }
 
   // get detail profile tukang
