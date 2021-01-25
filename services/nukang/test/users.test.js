@@ -96,7 +96,7 @@ describe('Login User POST /user/login', () => {
     test('Response with error message', async done => {
       try {
         const res = await request(app).post('/user/login')
-          .send({ email: 'n@mail.com', password: 'thiswrong' })
+          .send({ email: 'user1@mail.com', password: 'thiswrong' })
         const { body, status } = res
         expect(status).toBe(400)
         expect(body).toHaveProperty('message', 'Invalid Account')
@@ -115,6 +115,23 @@ describe('Login User POST /user/login', () => {
           .send({ email: 'n@mail.com' })
         const { body, status } = res
         expect(body).toHaveProperty('message', 'Invalid Account')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+
+  describe('Login User Failed No Email', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app)
+          .post('/user/login')
+          .send({ email: '', password: 'thisuser' })
+        const { body, status } = res
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('message', 'Please Fill Email')
         done()
       } catch (error) {
         done(error)
@@ -172,7 +189,7 @@ describe('Add Order POST /user/order/', () => {
     test('Response with error message', async done => {
       try {
         const res = await request(app).post('/user/order/')
-        .set('access_token', nouser_access_token)
+          .set('access_token', nouser_access_token)
           .send({
             userId: idUser,
             tukangId: idTukang,
@@ -246,11 +263,42 @@ describe('Find All by User Get /user/order/', () => {
     })
   })
 
-
   describe('Get Order List Error Not Found', () => {
     test('Response with error message', async done => {
       try {
         const res = await request(app).get('/user/order/2')
+          .set('access_token', access_token)
+        const { body, status } = res
+        expect(status).toBe(404)
+        expect(body).toHaveProperty('message', 'Error Not Found')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+})
+
+describe('Find Tukang Detail Get /user/order/tukang/:id', () => {
+  describe('Get Tukang Detail Success', () => {
+    test('Response with order list', async done => {
+      try {
+        const res = await request(app).get('/user/order/tukang/' + idTukang)
+          .set('access_token', access_token)
+        const { body, status } = res
+        expect(status).toBe(200)
+        expect(body).toBeDefined()
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Get Tukang Detail Error Not Found', () => {
+    test('Response with order list', async done => {
+      try {
+        const res = await request(app).get('/user/order/tukang/2')
           .set('access_token', access_token)
         const { body, status } = res
         expect(status).toBe(404)

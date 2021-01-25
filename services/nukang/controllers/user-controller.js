@@ -24,11 +24,17 @@ class UserController {
     }
   }
 
-  static loginUser(req, res, next) {
-    UserModel.login({
-      email: req.body.email,
-    })
-      .then((data) => {
+  static async loginUser(req, res, next) {
+    try {
+      if (req.body.email === "") {
+        throw {
+          status: 400,
+          message: "Please Fill Email"
+        }
+      } else {
+        const data = await UserModel.login({
+          email: req.body.email,
+        })
         if (!data) {
           throw {
             status: 400,
@@ -37,11 +43,16 @@ class UserController {
         } else if (compare(req.body.password, data.password)) {
           const access_token = encode(data);
           res.status(200).json({ access_token: access_token });
+        } else {
+          throw {
+            status: 400,
+            message: "Invalid Account",
+          };
         }
-      })
-      .catch((err) => {
-        next(err);
-      });
+      }
+    } catch (error) {
+      next(error)
+    }
   }
 
   static async createOrder(req, res, next) {
@@ -84,9 +95,10 @@ class UserController {
   }
 
   // get detail profile tukang
-  static getTukangDetail(req, res, next) {
-    TukangModel.findOne(req.params.id)
-      .then((data) => {
+  static async getTukangDetail(req, res, next) {
+    try {
+      if (!Number(req.params.id)) {
+        const data = await TukangModel.findOne(req.params.id)
         res.status(200).json({
           id: data._id,
           name: data.name,
@@ -100,10 +112,15 @@ class UserController {
           big_project_price: data.big_project_price,
           portofolio_img: data.portofolio_img,
         });
-      })
-      .catch((err) => {
-        next(err);
-      });
+      } else {
+        throw {
+          status: 404,
+          message: "Error Not Found"
+        }
+      }
+    } catch (error) {
+      next(error)
+    }
   }
 }
 
