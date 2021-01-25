@@ -28,19 +28,18 @@ class AdminController {
       if (req.body.email === "") {
         throw {
           status: 400,
-          message: "Please Fill Email"
-        }
+          message: "Please Fill Email",
+        };
       } else {
         const data = await AdminModel.register({
           email: req.body.email,
           password: req.body.password,
-        })
+        });
         res.status(201).json({ id: data._id, email: data.email });
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
-
   }
 
   static async createTukang(req, res, next) {
@@ -48,13 +47,13 @@ class AdminController {
       if (req.body.email === "") {
         throw {
           status: 400,
-          message: "Please Fill Email"
-        }
+          message: "Please Fill Email",
+        };
       } else {
         const data = await AdminModel.createOne({
           email: req.body.email,
           password: req.body.password,
-        })
+        });
         res.status(201).json({
           id: data._id,
           email: data.email,
@@ -65,31 +64,30 @@ class AdminController {
           small_project_desc: data.small_project,
           small_project_price: data.small_project_price,
           medium_project_desc: data.medium_project,
-          medim_project_price: data.medium_project_price,
+          medium_project_price: data.medium_project_price,
           big_project_desc: data.big_project,
           big_project_price: data.big_project_price,
           portofolio_img: data.portofolio_img,
         });
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
-
   }
 
   static async deleteTukang(req, res, next) {
     try {
       if (!Number(req.params.id)) {
-        const data = await AdminModel.deleteOne(req.params.id)
+        const data = await AdminModel.deleteOne(req.params.id);
         res.status(200).json({ message: "success delete" });
       } else {
         throw {
           status: 404,
-          message: "Error Not Found"
-        }
+          message: "Error Not Found",
+        };
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
