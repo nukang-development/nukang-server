@@ -35,6 +35,14 @@ router.put(
   upload.array("url"),
   TukangController.updateTukang
 );
+
+router.put(
+  "/:id/upload",
+  authentication,
+  authorization_tukang,
+  upload.array("url"),
+  TukangController.uploadImages
+);
 router.post("/login", TukangController.loginTukang);
 router.get(
   "/:id",

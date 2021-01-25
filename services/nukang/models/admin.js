@@ -23,7 +23,7 @@ class AdminModel {
   static createOne(payload) {
     let hashed = hash(payload.password);
     return Tukang.insertOne({
-      email: payload.email,
+      username: payload.username,
       password: hashed,
       role: "tukang",
       name: "",

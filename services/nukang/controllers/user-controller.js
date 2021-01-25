@@ -16,8 +16,11 @@ class UserController {
         const data = await UserModel.register({
           email: req.body.email,
           password: req.body.password,
+          name: req.body.name,
         });
-        res.status(201).json({ id: data._id, email: data.email });
+        res
+          .status(201)
+          .json({ id: data._id, email: data.email, name: data.name });
       }
     } catch (error) {
       next(error);
@@ -135,6 +138,31 @@ class UserController {
     } catch (error) {
       next(error)
     }
+  }
+
+  static getUserProfile(req, res, next) {
+    UserModel.findOneProfile(req.params.id)
+      .then((data) => {
+        console.log(data, "profile");
+        res
+          .status(200)
+          .json({ id: data._id, email: data.email, name: data.name });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+
+  // get all tukang data
+  static getAllTukangData(req, res, next) {
+    TukangModel.getAll()
+      .then((data) => {
+        console.log(data);
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        next(err);
+      });
   }
 }
 
