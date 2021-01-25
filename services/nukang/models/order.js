@@ -7,7 +7,12 @@ class OrderModel {
     return Order.insertOne({
       userId: payload.userId,
       tukangId: payload.tukangId,
+      schedule: req.body.schedule,
+      contact: req.body.contact,
+      address: req.body.address,
+      total_price: req.body.total_price,
       schedule: payload.schedule,
+      comment: "",
       status: "pending",
     }).then((data) => {
       return data.ops[0];
@@ -34,6 +39,21 @@ class OrderModel {
       {
         $set: {
           status: "rejected",
+        },
+      },
+      {
+        returnOriginal: false,
+      }
+    );
+  }
+
+  static updateDone(payload) {
+    return Order.findOneAndUpdate(
+      { _id: ObjectId(payload.id) },
+      {
+        $set: {
+          status: "done",
+          comment: payload.comment,
         },
       },
       {

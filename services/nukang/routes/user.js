@@ -11,6 +11,12 @@ router.post(
   authorization_user,
   UserController.createOrder
 );
+router.put(
+  "/order/:id/done",
+  authentication,
+  authorization_user,
+  UserController.updateOrderDone
+);
 router.get(
   "/order/:id",
   authentication,
