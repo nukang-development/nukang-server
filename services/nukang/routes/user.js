@@ -17,4 +17,11 @@ router.get(
   authorization_user,
   UserController.findByUser
 );
+
+router.get(
+  "/tukang/:id/detail",
+  authentication,
+  authorization_user,
+  UserController.getTukangDetail
+);
 module.exports = router;
