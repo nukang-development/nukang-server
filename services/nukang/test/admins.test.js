@@ -14,9 +14,10 @@ beforeAll(async done => {
     const account_user = await User.insertOne({
       email: 'user1@mail.com',
       password: hashedUser,
+      name: "Saya User",
       role: "user"
     })
-    noadmin_access_token = encode(account_user)
+    noadmin_access_token = encode(account_user.ops[0])
     done()
   } catch (error) {
     done(error)
@@ -118,14 +119,14 @@ describe('Add Tukang POST /admin/tukang', () => {
         const res = await request(app).post('/admin/tukang')
           .set('access_token', admin_access_token)
           .send({
-            email: 'john@mail.com',
-            password: 'thistukang'
+            username: 'johndoe',
+            password: 'thistukang',
           })
         const { body, status } = res
         expect(status).toBe(201)
         tukangId = res.body.id
         expect(body).toHaveProperty('id', tukangId)
-        expect(body).toHaveProperty('email', 'john@mail.com')
+        expect(body).toHaveProperty('username', 'johndoe')
         expect(body).toHaveProperty('role', 'tukang')
         expect(body).toHaveProperty('name', '')
         expect(body).toHaveProperty('location', '')
@@ -141,25 +142,7 @@ describe('Add Tukang POST /admin/tukang', () => {
     })
   })
 
-  describe('Add Tukang Failed No Access Token', () => {
-    test('Response error message', async done => {
-      const res = await request(app).post('/admin/tukang')
-        .send({
-          email: 'john@mail.com',
-          password: 'thistukang'
-        })
-      try {
-        const { body, status } = res
-        expect(status).toBe(401)
-        expect(body).toHaveProperty('message', "Please Login First")
-        done()
-      } catch (error) {
-        done(error)
-      }
-    })
-  })
-
-  describe('Add Tukang Failed Not Admin', () => {
+  describe('Add Tukang Failed No Admin Access Token', () => {
     test('Response error message', async done => {
       const res = await request(app).post('/admin/tukang')
         .set('access_token', noadmin_access_token)
@@ -178,18 +161,36 @@ describe('Add Tukang POST /admin/tukang', () => {
     })
   })
 
-  describe('Add Tukang Error No Email', () => {
+  describe('Add Tukang Failed No Access Token', () => {
+    test('Response error message', async done => {
+      const res = await request(app).post('/admin/tukang')
+        .send({
+          username: 'johndoe',
+          password: 'thistukang'
+        })
+      try {
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', "Please Login First")
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Add Tukang Error No Username', () => {
     test('Response error message', async done => {
       try {
         const res = await request(app).post('/admin/tukang')
           .set('access_token', admin_access_token)
           .send({
-            email: '',
+            username: '',
             password: 'thistukang'
           })
         const { body, status } = res
         expect(status).toBe(400)
-        expect(body).toHaveProperty('message', 'Please Fill Email')
+        expect(body).toHaveProperty('message', 'Please Fill Username')
         done()
       } catch (error) {
         done(error)
@@ -214,20 +215,6 @@ describe('Delete Tukang /admin/tukang/:id', () => {
     })
   })
 
-  describe('Delete Tukang Failed No Token Access', () => {
-    test('Response error message', async done => {
-      const res = await request(app).delete('/admin/tukang/' + tukangId)
-      try {
-        const { body, status } = res
-        expect(status).toBe(401)
-        expect(body).toHaveProperty('message', "Please Login First")
-        done()
-      } catch (error) {
-        done(error)
-      }
-    })
-  })
-
   describe('Delete Tukang Failed No Admin Access Token', () => {
     test('Response error message', async done => {
       const res = await request(app).delete('/admin/tukang/' + tukangId)
@@ -236,6 +223,20 @@ describe('Delete Tukang /admin/tukang/:id', () => {
         const { body, status } = res
         expect(status).toBe(401)
         expect(body).toHaveProperty('message', 'Only Admin')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Delete Tukang Failed No Access Token', () => {
+    test('Response error message', async done => {
+      const res = await request(app).delete('/admin/tukang/' + tukangId)
+      try {
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', "Please Login First")
         done()
       } catch (error) {
         done(error)
@@ -274,6 +275,21 @@ describe('Find All Order Get /admin/order', () => {
       }
     })
   })
+  
+  describe('Get Order List Failed No Admin Access Token', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).get('/admin/order')
+          .set('access_token', noadmin_access_token)
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Only Admin')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
 
   describe('Get Order List Failed No Access Token', () => {
     test('Response with error message', async done => {
@@ -288,15 +304,47 @@ describe('Find All Order Get /admin/order', () => {
       }
     })
   })
+})
+
+
+describe('Find All Tukang Get /admin/all-tukang', () => {
+  describe('Get Tukang List Success', () => {
+    test('Response with order list', async done => {
+      try {
+        const res = await request(app).get('/admin/all-tukang')
+          .set('access_token', admin_access_token)
+        const { body, status } = res
+        expect(status).toBe(200)
+        expect(body).toBeDefined()
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
 
   describe('Get Order List Failed No Admin Access Token', () => {
     test('Response with error message', async done => {
       try {
-        const res = await request(app).get('/admin/order')
+        const res = await request(app).get('/admin/all-tukang')
           .set('access_token', noadmin_access_token)
         const { body, status } = res
         expect(status).toBe(401)
         expect(body).toHaveProperty('message', 'Only Admin')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Get Tukang List Failed No Access Token', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).get('/admin/all-tukang')
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Please Login First')
         done()
       } catch (error) {
         done(error)

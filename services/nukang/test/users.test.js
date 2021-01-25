@@ -17,15 +17,23 @@ beforeAll(async done => {
   try {
     let hashed = hash('thistukang')
     const account_tukang = await Tukang.insertOne({
-      email: 'john@mail.com',
+      username: 'johndoe',
       password: hashed,
+      role: 'tukang',
       name: "",
       location: "",
       category: "",
-      price: 0,
+      small_project_desc: "",
+      small_project_price: 0,
+      medium_project_desc: "",
+      medium_project_price: 0,
+      big_project_desc: "",
+      big_project_price: 0,
+      portofolio_img: [],
+      avatar_img: {},
     })
     idTukang = account_tukang.ops[0]._id
-    nouser_access_token = encode(account_tukang)
+    nouser_access_token = encode(account_tukang.ops[0])
     done()
   } catch (error) {
     done(error)
@@ -41,22 +49,22 @@ afterAll(done => {
 
 describe('Register User POST /user/register', () => {
   describe('Register User Success', () => {
-    test('Response with id and email', async done => {
+    test('Response with id, email, and name', async done => {
       try {
         const res = await request(app).post('/user/register')
-          .send({ email: 'user1@mail.com', password: 'thisuser' })
+          .send({ email: 'user1@mail.com', password: 'thisuser', name: 'Saya User' })
         const { body, status } = res
         expect(status).toBe(201)
         idUser = res.body.id
         expect(body).toHaveProperty('id', expect.any(String))
         expect(body).toHaveProperty('email', 'user1@mail.com')
+        expect(body).toHaveProperty('name', 'Saya User')
         done()
       } catch (error) {
         done(error)
       }
     })
   })
-
 
   describe('Register User Failed No Email', () => {
     test('Response with error message', async done => {
@@ -142,14 +150,17 @@ describe('Login User POST /user/login', () => {
 
 describe('Add Order POST /user/order/', () => {
   describe('Add Order List Success', () => {
-    test('Response with order list', async done => {
+    test('Response with added order list', async done => {
       try {
         const res = await request(app).post('/user/order/')
           .set('access_token', access_token)
           .send({
             userId: idUser,
             tukangId: idTukang,
-            schedule: "09.00"
+            schedule: "09.00",
+            contact: "08002328392",
+            address: "Jakarta",
+            total_price: 10000,
           })
         const { body, status } = res
         idOrder = res.body._id
@@ -157,8 +168,33 @@ describe('Add Order POST /user/order/', () => {
         expect(body).toHaveProperty('_id', expect.any(String))
         expect(body).toHaveProperty('userId', expect.any(String))
         expect(body).toHaveProperty('tukangId', expect.any(String))
+        expect(body).toHaveProperty('tukangName', expect.any(String))
         expect(body).toHaveProperty('schedule', "09.00")
         expect(body).toHaveProperty('status', 'pending')
+        expect(body).toHaveProperty('contact', '08002328392')
+        expect(body).toHaveProperty('address', 'Jakarta')
+        expect(body).toHaveProperty('total_price', 10000)
+        expect(body).toHaveProperty('comment', expect.any(String))
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Add Order List Failed No User Access Token', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).post('/user/order/')
+          .set('access_token', nouser_access_token)
+          .send({
+            userId: idUser,
+            tukangId: idTukang,
+            schedule: "09.00"
+          })
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Only User')
         done()
       } catch (error) {
         done(error)
@@ -184,27 +220,6 @@ describe('Add Order POST /user/order/', () => {
       }
     })
   })
-
-  describe('Add Order List Failed No Access Token', () => {
-    test('Response with error message', async done => {
-      try {
-        const res = await request(app).post('/user/order/')
-          .set('access_token', nouser_access_token)
-          .send({
-            userId: idUser,
-            tukangId: idTukang,
-            schedule: "09.00"
-          })
-        const { body, status } = res
-        expect(status).toBe(401)
-        expect(body).toHaveProperty('message', 'Only User')
-        done()
-      } catch (error) {
-        done(error)
-      }
-    })
-  })
-
 
   describe('Add Order List Failed User Id Required', () => {
     test('Response with error message', async done => {
@@ -240,8 +255,29 @@ describe('Find All by User Get /user/order/', () => {
         expect(body[0]).toHaveProperty('_id', expect.any(String))
         expect(body[0]).toHaveProperty('userId', expect.any(String))
         expect(body[0]).toHaveProperty('tukangId', expect.any(String))
+        expect(body[0]).toHaveProperty('tukangName', expect.any(String))
         expect(body[0]).toHaveProperty('schedule', "09.00")
-        expect(body[0]).toHaveProperty('status', expect.any(String))
+        expect(body[0]).toHaveProperty('status', 'pending')
+        expect(body[0]).toHaveProperty('contact', '08002328392')
+        expect(body[0]).toHaveProperty('address', 'Jakarta')
+        expect(body[0]).toHaveProperty('total_price', 10000)
+        expect(body[0]).toHaveProperty('comment', expect.any(String))
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+
+  describe('Get Order List Failed No User Access Token', () => {
+    test('Response with order list', async done => {
+      try {
+        const res = await request(app).get('/user/order/' + idUser)
+          .set('access_token', nouser_access_token)
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Only User')
         done()
       } catch (error) {
         done(error)
@@ -279,11 +315,11 @@ describe('Find All by User Get /user/order/', () => {
   })
 })
 
-describe('Find Tukang Detail Get /user/order/tukang/:id', () => {
+describe('Find Tukang Detail Get /user/tukang/:id/detail', () => {
   describe('Get Tukang Detail Success', () => {
     test('Response with order list', async done => {
       try {
-        const res = await request(app).get('/user/order/tukang/' + idTukang)
+        const res = await request(app).get(`/user/tukang/${idTukang}/detail`)
           .set('access_token', access_token)
         const { body, status } = res
         expect(status).toBe(200)
@@ -295,14 +331,239 @@ describe('Find Tukang Detail Get /user/order/tukang/:id', () => {
     })
   })
 
+  describe('Get Tukang Detail Failed No User Access Token', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).get(`/user/tukang/${idTukang}/detail`)
+          .set('access_token', nouser_access_token)
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Only User')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Get Tukang Detail Failed No Access Token', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).get(`/user/tukang/${idTukang}/detail`)
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Please Login First')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
   describe('Get Tukang Detail Error Not Found', () => {
     test('Response with order list', async done => {
       try {
-        const res = await request(app).get('/user/order/tukang/2')
+        const res = await request(app).get('/user/tukang/2/detail')
           .set('access_token', access_token)
         const { body, status } = res
         expect(status).toBe(404)
         expect(body).toHaveProperty('message', 'Error Not Found')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+})
+
+describe('Update Order Done', () => {
+  describe('Update Order Done Success', () => {
+    test('Response with updated order', async done => {
+      try {
+        const res = await request(app).put(`/user/order/${idTukang}/done`)
+          .set('access_token', access_token)
+          .send({
+            comment: "Sangat Bagus"
+          })
+        const { body, status } = res
+        expect(status).toBe(200)
+        expect(body).toBeDefined()
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Update Order Done Failed No User Access Token', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).put(`/user/order/${idTukang}/done`)
+          .set('access_token', nouser_access_token)
+          .send({
+            comment: "Sangat Bagus"
+          })
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Only User')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Update Order Done Failed No Access Token', () => {
+    test('Response with updated order', async done => {
+      try {
+        const res = await request(app).put(`/user/order/${idTukang}/done`)
+          .send({
+            comment: "Sangat Bagus"
+          })
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Please Login First')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Update Order Done Failed Error Not Found', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).put(`/user/order/2/done`)
+          .set('access_token', access_token)
+          .send({
+            comment: "Sangat Bagus"
+          })
+        const { body, status } = res
+        expect(status).toBe(404)
+        expect(body).toHaveProperty('message', 'Error Not Found')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+})
+
+describe('Get User Profile', () => {
+  describe('Get User Profile Success', () => {
+    test('Response with user profile', async done => {
+      try {
+        const res = await request(app).get(`/user/${idUser}` )
+          .set('access_token', access_token)
+        const { body, status } = res
+        expect(status).toBe(200)
+        expect(body).toHaveProperty('id', expect.any(String))
+        expect(body).toHaveProperty('email', expect.any(String))
+        expect(body).toHaveProperty('name', expect.any(String))
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Get User Profile Failed No User Access Token', () => {
+    test('Response with user profile', async done => {
+      try {
+        const res = await request(app).get(`/user/${idUser}` )
+          .set('access_token', nouser_access_token)
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Only User')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Get User Profile Failed No Access Token', () => {
+    test('Response with user profile', async done => {
+      try {
+        const res = await request(app).get(`/user/${idUser}` )
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Please Login First')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Get User Profile Error Not Found', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).get(`/user/2` )
+          .set('access_token', access_token)
+        const { body, status } = res
+        expect(status).toBe(404)
+        expect(body).toHaveProperty('message', 'Error Not Found')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+})
+
+describe('Get All Tukang Data', () => {
+  describe('Get All Tukang Data Success', () => {
+    test('Response with tukang data', async done => {
+      try {
+        const res = await request(app).get(`/user/tukang` )
+          .set('access_token', access_token)
+        const { body, status } = res
+        expect(status).toBe(200)
+        expect(body[0]).toHaveProperty('_id', expect.any(String))
+        expect(body[0]).toHaveProperty('username', expect.any(String))
+        expect(body[0]).toHaveProperty('password', expect.any(String))
+        expect(body[0]).toHaveProperty('role', expect.any(String))
+        expect(body[0]).toHaveProperty('name', expect.any(String))
+        expect(body[0]).toHaveProperty('location', expect.any(String))
+        expect(body[0]).toHaveProperty('category', expect.any(String))
+        expect(body[0]).toHaveProperty('small_project_desc', expect.any(String))
+        expect(body[0]).toHaveProperty('small_project_price', expect.any(Number))
+        expect(body[0]).toHaveProperty('medium_project_desc', expect.any(String))
+        expect(body[0]).toHaveProperty('medium_project_price', expect.any(Number))
+        expect(body[0]).toHaveProperty('big_project_desc', expect.any(String))
+        expect(body[0]).toHaveProperty('big_project_price', expect.any(Number))
+        expect(body[0]).toHaveProperty('portofolio_img', expect.any(Array))
+        expect(body[0]).toHaveProperty('avatar_img', expect.any(Object))
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Get All Tukang Data Failed No User Access Token', () => {
+    test('Response with tukang data', async done => {
+      try {
+        const res = await request(app).get(`/user/tukang` )
+          .set('access_token', nouser_access_token)
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Only User')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Get All Tukang Data Failed No Access Token', () => {
+    test('Response with tukang data', async done => {
+      try {
+        const res = await request(app).get(`/user/tukang` )
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Please Login First')
         done()
       } catch (error) {
         done(error)
