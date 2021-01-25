@@ -5,24 +5,23 @@ const { compare } = require("../helpers/bcrypt-helper");
 const { encode } = require("../helpers/jwt-helper");
 
 class AdminController {
-  static loginAdmin(req, res, next) {
-    AdminModel.login({
-      email: req.body.email,
-    })
-      .then((data) => {
-        if (!data) {
-          throw {
-            status: 400,
-            message: "Invalid Account",
-          };
-        } else if (compare(req.body.password, data.password)) {
-          const access_token = encode(data);
-          res.status(200).json({ access_token: access_token, id: data._id });
-        }
+  static async loginAdmin(req, res, next) {
+    try {
+      const data = await AdminModel.login({
+        email: req.body.email,
       })
-      .catch((err) => {
-        next(err);
-      });
+      if (!data) {
+        throw {
+          status: 400,
+          message: "Invalid Account",
+        };
+      } else if (compare(req.body.password, data.password)) {
+        const access_token = encode(data);
+        res.status(200).json({ access_token: access_token, id: data._id });
+      }
+    } catch (error) {
+      next(error)
+    }
   }
   static async registerAdmin(req, res, next) {
     try {
@@ -48,7 +47,7 @@ class AdminController {
       if (req.body.username === "") {
         throw {
           status: 400,
-          message: "Please Fill Email",
+          message: "Please Fill Username",
         };
       } else {
         const data = await AdminModel.createOne({
@@ -92,26 +91,23 @@ class AdminController {
     }
   }
 
-  static findAllOrder(req, res, next) {
-    OrderModel.findAll()
-      .then((data) => {
-        res.status(200).json(data);
-      })
-      .catch((err) => {
-        next(err);
-      });
+  static async findAllOrder(req, res, next) {
+    try {
+      const data = await OrderModel.findAll()
+      res.status(200).json(data);
+    } catch (error) {
+      next(error)
+    }
   }
 
   // get all tukang data
-  static getAllTukangData(req, res, next) {
-    TukangModel.getAll()
-      .then((data) => {
-        console.log(data);
-        res.status(200).json(data);
-      })
-      .catch((err) => {
-        next(err);
-      });
+  static async getAllTukangData(req, res, next) {
+    try {
+      const data = await TukangModel.getAll()
+      res.status(200).json(data);
+    } catch (error) {
+      next(error)
+    }
   }
 }
 
