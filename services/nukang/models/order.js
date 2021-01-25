@@ -6,7 +6,9 @@ class OrderModel {
   static createOne(payload) {
     return Order.insertOne({
       userId: payload.userId,
+      userName: payload.userName,
       tukangId: payload.tukangId,
+      tukangName: payload.tukangName,
       schedule: payload.schedule,
       contact: payload.contact,
       address: payload.address,

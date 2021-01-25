@@ -70,6 +70,37 @@ class TukangController {
     }
   }
 
+  static uploadAvatar(req, res, next) {
+    if (req.file.length !== 0) {
+      const encoded_avatar = req.file.buffer.toString("base64");
+
+      imgur
+        .uploadBase64(encoded_avatar)
+        .then((image) => {
+          return TukangModel.updateAvatar({
+            id: req.params.id,
+            avatar_img: image,
+          })
+            .then((data) => {
+              res.status(201).json({
+                avatar_img: data.value.avatar_img,
+              });
+            })
+            .catch((err) => {
+              next(err);
+            });
+        })
+        .catch((err) => {
+          next(err);
+        });
+    } else {
+      throw {
+        status: 404,
+        message: "Error Not Found",
+      };
+    }
+  }
+
   static async findOneTukang(req, res, next) {
     try {
       if (!Number(req.params.id)) {
