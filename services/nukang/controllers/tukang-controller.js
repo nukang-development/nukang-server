@@ -6,7 +6,7 @@ const imgur = require("imgur");
 
 class TukangController {
   // update profile tukang
-  static async updateTukang(req, res) {
+  static async updateTukang(req, res, next) {
     try {
       if (!Number(req.params.id)) {
         const data = await TukangModel.updateOne({
@@ -69,12 +69,10 @@ class TukangController {
       if (req.file.length !== 0) {
         const encoded_avatar = req.file.buffer.toString("base64");
         const image = await imgur.uploadBase64(encoded_avatar);
-        console.log(image);
         const data = await TukangModel.updateAvatar({
           id: req.params.id,
           avatar_img: image.data,
         });
-        console.log(data);
         res.status(201).json(data.value.avatar_img);
       }
     } catch (error) {
@@ -127,7 +125,6 @@ class TukangController {
             message: "Invalid Account",
           };
         } else if (compare(req.body.password, data.password)) {
-          console.log(data);
           const access_token = encode(data);
           res.status(200).json({ access_token: access_token, id: data._id });
         }
