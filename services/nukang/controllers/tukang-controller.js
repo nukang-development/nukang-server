@@ -7,39 +7,67 @@ const imgur = require("imgur");
 class TukangController {
   // update profile tukang
   static updateTukang(req, res) {
-    req.files;
-    let encodedImgArray = [];
-    for (let i = 0; i < req.files.length; i++) {
-      encodedImgArray.push(req.files[i].buffer.toString("base64"));
-    }
-    imgur
-      .uploadImages(encodedImgArray, "Base64")
-      .then((images) => {
-        return TukangModel.updateOne({
-          id: req.params.id,
-          name: req.body.name,
-          location: req.body.location,
-          category: req.body.category,
-          price: req.body.price,
-          portofolio_img: images,
-        })
-          .then((data) => {
-            res.status(201).json({
-              id: data.value._id,
-              name: data.value.name,
-              location: data.value.location,
-              category: data.value.category,
-              price: data.value.price,
-              portofolio_img: data.value.portofolio_img,
-            });
-          })
-          .catch((err) => {
-            res.status(400).json({ message: "Internal Server Error" });
-          });
+    TukangModel.updateOne({
+      id: req.params.id,
+      name: req.body.name,
+      location: req.body.location,
+      category: req.body.category,
+      small_project_desc: req.body.small_project_desc,
+      small_project_price: req.body.small_project_price,
+      medium_project_desc: req.body.medium_project_desc,
+      medium_project_price: req.body.medium_project_price,
+      big_project_desc: req.body.big_project_desc,
+      big_project_price: req.body.big_project_price,
+    })
+      .then((data) => {
+        res.status(201).json({
+          name: data.value.name,
+          location: data.value.location,
+          category: data.value.category,
+          small_project_desc: data.value.small_project_desc,
+          small_project_price: data.value.small_project_price,
+          medium_project_desc: data.value.medium_project_desc,
+          medium_project_price: data.value.medium_project_price,
+          big_project_desc: data.value.big_project_desc,
+          big_project_price: data.value.big_project_price,
+        });
       })
       .catch((err) => {
-        res.status(400).json({ message: "Internal Server Error" });
+        next(err);
       });
+  }
+
+  static uploadImages(req, res, next) {
+    let encodedImgArray = [];
+    if (req.files.length !== 0) {
+      for (let i = 0; i < req.files.length; i++) {
+        encodedImgArray.push(req.files[i].buffer.toString("base64"));
+      }
+      imgur
+        .uploadImages(encodedImgArray, "Base64")
+        .then((images) => {
+          return TukangModel.updateImages({
+            id: req.params.id,
+            portofolio_img: images,
+          })
+            .then((data) => {
+              res.status(201).json({
+                portofolio_img: data.value.portofolio_img,
+              });
+            })
+            .catch((err) => {
+              next(err);
+            });
+        })
+        .catch((err) => {
+          next(err);
+        });
+    } else {
+      throw {
+        status: 404,
+        message: "Error Not Found",
+      };
+    }
   }
 
   static async findOneTukang(req, res, next) {
