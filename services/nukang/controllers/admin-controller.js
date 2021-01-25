@@ -48,7 +48,7 @@ class AdminController {
       if (req.body.username === "") {
         throw {
           status: 400,
-          message: "Please Fill Email",
+          message: "Please Fill Username",
         };
       } else {
         const data = await AdminModel.createOne({
