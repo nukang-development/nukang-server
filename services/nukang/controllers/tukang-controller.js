@@ -20,7 +20,7 @@ class TukangController {
           medium_project_price: req.body.medium_project_price,
           big_project_desc: req.body.big_project_desc,
           big_project_price: req.body.big_project_price,
-        })
+        });
         res.status(200).json({
           name: data.value.name,
           location: data.value.location,
@@ -31,15 +31,15 @@ class TukangController {
           medium_project_price: data.value.medium_project_price,
           big_project_desc: data.value.big_project_desc,
           big_project_price: data.value.big_project_price,
-        })
+        });
       } else {
         throw {
           status: 404,
-          message: "Error Not Found"
-        }
+          message: "Error Not Found",
+        };
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -50,17 +50,17 @@ class TukangController {
         for (let i = 0; i < req.files.length; i++) {
           encodedImgArray.push(req.files[i].buffer.toString("base64"));
         }
-        const images = await imgur.uploadImages(encodedImgArray, "Base64")
+        const images = await imgur.uploadImages(encodedImgArray, "Base64");
         const data = await TukangModel.updateImages({
           id: req.params.id,
-          portofolio_img: images
-        })
+          portofolio_img: images,
+        });
         res.status(201).json({
           portofolio_img: data.value.portofolio_img,
         });
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -68,17 +68,17 @@ class TukangController {
     try {
       if (req.file.length !== 0) {
         const encoded_avatar = req.file.buffer.toString("base64");
-        const images = await imgur.uploadBase64(encoded_avatar)
+        const image = await imgur.uploadBase64(encoded_avatar);
+        console.log(image);
         const data = await TukangModel.updateAvatar({
           id: req.params.id,
-          avatar_img: image,
-        })
-        res.status(201).json({
-          avatar_img: data.value.avatar_img,
+          avatar_img: image.data,
         });
+        console.log(data);
+        res.status(201).json(data.value.avatar_img);
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -120,7 +120,7 @@ class TukangController {
       } else {
         const data = await TukangModel.login({
           username: req.body.username,
-        })
+        });
         if (!data) {
           throw {
             status: 400,
@@ -133,7 +133,7 @@ class TukangController {
         }
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
