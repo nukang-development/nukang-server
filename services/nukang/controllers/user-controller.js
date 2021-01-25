@@ -32,12 +32,12 @@ class UserController {
       if (req.body.email === "") {
         throw {
           status: 400,
-          message: "Please Fill Email"
-        }
+          message: "Please Fill Email",
+        };
       } else {
         const data = await UserModel.login({
           email: req.body.email,
-        })
+        });
         if (!data) {
           throw {
             status: 400,
@@ -45,7 +45,7 @@ class UserController {
           };
         } else if (compare(req.body.password, data.password)) {
           const access_token = encode(data);
-          res.status(200).json({ access_token: access_token });
+          res.status(200).json({ access_token: access_token, id: data._id });
         } else {
           throw {
             status: 400,
@@ -54,7 +54,7 @@ class UserController {
         }
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -115,7 +115,7 @@ class UserController {
   static async getTukangDetail(req, res, next) {
     try {
       if (!Number(req.params.id)) {
-        const data = await TukangModel.findOne(req.params.id)
+        const data = await TukangModel.findOne(req.params.id);
         res.status(200).json({
           id: data._id,
           name: data.name,
@@ -132,11 +132,11 @@ class UserController {
       } else {
         throw {
           status: 404,
-          message: "Error Not Found"
-        }
+          message: "Error Not Found",
+        };
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
