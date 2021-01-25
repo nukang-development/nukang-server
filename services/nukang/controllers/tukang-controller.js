@@ -7,7 +7,7 @@ const imgur = require("imgur");
 class TukangController {
   // update profile tukang
   static updateTukang(req, res) {
-    (req.files);
+    req.files;
     let encodedImgArray = [];
     for (let i = 0; i < req.files.length; i++) {
       encodedImgArray.push(req.files[i].buffer.toString("base64"));
@@ -45,7 +45,7 @@ class TukangController {
   static async findOneTukang(req, res, next) {
     try {
       if (!Number(req.params.id)) {
-        const data = await TukangModel.findOne(req.params.id)
+        const data = await TukangModel.findOne(req.params.id);
         res.status(200).json({
           id: data._id,
           name: data.name,
@@ -54,7 +54,7 @@ class TukangController {
           small_project_desc: data.small_project_desc,
           small_project_price: data.small_project_price,
           medium_project_desc: data.medium_project_desc,
-          medim_project_price: data.medium_project_price,
+          medium_project_price: data.medium_project_price,
           big_project_desc: data.big_project_desc,
           big_project_price: data.big_project_price,
           portofolio_img: data.portofolio_img,
@@ -62,13 +62,12 @@ class TukangController {
       } else {
         throw {
           status: 404,
-          message: "Error Not Found"
-        }
+          message: "Error Not Found",
+        };
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
-
   }
 
   static loginTukang(req, res, next) {
@@ -94,13 +93,13 @@ class TukangController {
   static async findByTukang(req, res, next) {
     try {
       if (!Number(req.params.id)) {
-        const data = await OrderModel.findAllbyTukang(req.params.id)
-        res.status(200).json(data)
+        const data = await OrderModel.findAllbyTukang(req.params.id);
+        res.status(200).json(data);
       } else {
         throw {
           status: 404,
-          message: "Error Not Found"
-        }
+          message: "Error Not Found",
+        };
       }
     } catch (error) {
       next(error);
@@ -110,32 +109,32 @@ class TukangController {
   static async updateOrderAccepted(req, res, next) {
     try {
       if (!Number(req.params.id)) {
-        const data = await OrderModel.updateAccept(req.params.id)
+        const data = await OrderModel.updateAccept(req.params.id);
         res.status(200).json(data.value);
       } else {
         throw {
           status: 404,
-          message: "Error Not Found"
-        }
+          message: "Error Not Found",
+        };
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
   static async updateOrderRejected(req, res, next) {
     try {
       if (!Number(req.params.id)) {
-        const data = await OrderModel.updateReject(req.params.id)
+        const data = await OrderModel.updateReject(req.params.id);
         res.status(200).json(data.value);
       } else {
         throw {
           status: 404,
-          message: "Error Not Found"
-        }
+          message: "Error Not Found",
+        };
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 }
