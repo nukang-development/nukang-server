@@ -44,6 +44,23 @@ class TukangModel {
     );
   }
 
+  static updateAvatar(payload) {
+    console.log(payload);
+    return Tukang.findOneAndUpdate(
+      {
+        _id: ObjectId(payload.id),
+      },
+      {
+        $set: {
+          avatar_img: payload.avatar_img,
+        },
+      },
+      {
+        returnOriginal: false,
+      }
+    );
+  }
+
   static login(payload) {
     return Tukang.findOne({
       email: payload.email,

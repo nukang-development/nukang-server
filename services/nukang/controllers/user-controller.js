@@ -3,6 +3,7 @@ const OrderModel = require("../models/order");
 const TukangModel = require("../models/tukang");
 const { compare } = require("../helpers/bcrypt-helper");
 const { encode } = require("../helpers/jwt-helper");
+const { createTukang } = require("./admin-controller");
 
 class UserController {
   static async registerUser(req, res, next) {
@@ -61,9 +62,15 @@ class UserController {
   static async createOrder(req, res, next) {
     try {
       if (req.body.userId) {
+        const userData = await UserModel.findOneProfile(req.body.userId);
+        console.log(userData);
+        const tukangData = await TukangModel.findOne(req.body.tukangId);
+        console.log(tukangData);
         const data = await OrderModel.createOne({
           userId: req.body.userId,
+          userName: userData.name,
           tukangId: req.body.tukangId,
+          tukangName: tukangData.name,
           schedule: req.body.schedule,
           contact: req.body.contact,
           address: req.body.address,

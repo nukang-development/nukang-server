@@ -10,6 +10,12 @@ const upload = multer({
   },
 });
 
+const avatar = multer({
+  limits: {
+    fileSize: 5000000,
+  },
+});
+
 router.get(
   "/order/:id",
   authentication,
@@ -32,7 +38,6 @@ router.put(
   "/:id",
   authentication,
   authorization_tukang,
-  upload.array("url"),
   TukangController.updateTukang
 );
 
@@ -43,6 +48,7 @@ router.put(
   upload.array("url"),
   TukangController.uploadImages
 );
+router.put("/:id/avatar", avatar.single("avatar"));
 router.post("/login", TukangController.loginTukang);
 router.get(
   "/:id",

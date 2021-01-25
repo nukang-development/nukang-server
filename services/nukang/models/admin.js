@@ -37,6 +37,7 @@ class AdminModel {
       big_project_desc: "",
       big_project_price: 0,
       portofolio_img: [],
+      avatar_img: {},
     }).then((data) => {
       return data.ops[0];
     });
