@@ -3,12 +3,10 @@ const app = require('../app')
 const { hash } = require('../helpers/bcrypt-helper')
 const { encode } = require("../helpers/jwt-helper")
 const db = require("../config/mongo");
-const multer = require
 const { ObjectID } = require('mongodb');
 const Tukang = db.collection("tukangs");
 const Order = db.collection("orders");
 const User = db.collection("users");
-const TukangController = require('../controllers/tukang-controller')
 let tukangId
 let orderId
 let userId
@@ -109,24 +107,17 @@ describe('Update Tukang PUT /tukang/:id', () => {
   //     try {
   //       const res = await request(app).put('/tukang/' + tukangId)
   //         .set('access_token', tukang_access_token)
-  //         .send({
-  //           name: 'Jone Slektemb',
-  //           location: 'Kota Semarang',
-  //           category: 'Tukang Bangunan',
-  //           price: 100000,
-  //           portofolio_img: 'https://jestjs.io/en',
-  //         })
-  //       const { body, status } = res
-  //       expect(status).toBe(200)
-  //       expect(body).toBeDefined()
+  //         .set('content-type', 'application/octet-stream')
+
+  //       const imgStream = fs.createReadStream(testImage);
+  //       imgStream.on('end', () => req.end(done));
+  //       imgStream.pipe(req, { end: false })
   //       done()
   //     } catch (error) {
   //       done(error)
   //     }
   //   })
   // })
-
-
 })
 
 describe('Find One Tukang GET /tukang/:id', () => {
@@ -321,9 +312,9 @@ describe('Find All by Tukang Get /tukang/order/:id', () => {
         const res = await request(app)
           .get('/tukang/order/2')
           .set('access_token', tukang_access_token)
-          const { body, status } = res
-          expect(status).toBe(404)
-          expect(body).toHaveProperty('message', 'Error Not Found')
+        const { body, status } = res
+        expect(status).toBe(404)
+        expect(body).toHaveProperty('message', 'Error Not Found')
         done()
       } catch (error) {
         done(error)
