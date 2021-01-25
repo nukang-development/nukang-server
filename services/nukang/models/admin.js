@@ -20,6 +20,7 @@ class AdminModel {
       return data.ops[0];
     });
   }
+
   static createOne(payload) {
     let hashed = hash(payload.password);
     return Tukang.insertOne({

@@ -23,5 +23,11 @@ router.delete(
   authorization_admin,
   AdminController.deleteTukang
 );
+router.get(
+  "/all-tukang",
+  authentication,
+  authorization_admin,
+  AdminController.getAllTukangData
+);
 
 module.exports = router;

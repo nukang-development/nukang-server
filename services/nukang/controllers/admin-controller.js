@@ -1,4 +1,5 @@
 const AdminModel = require("../models/admin");
+const TukangModel = require("../models/tukang");
 const OrderModel = require("../models/order");
 const { compare } = require("../helpers/bcrypt-helper");
 const { encode } = require("../helpers/jwt-helper");
@@ -44,7 +45,7 @@ class AdminController {
 
   static async createTukang(req, res, next) {
     try {
-      if (req.body.email === "") {
+      if (req.body.username === "") {
         throw {
           status: 400,
           message: "Please Fill Email",
@@ -94,6 +95,18 @@ class AdminController {
   static findAllOrder(req, res, next) {
     OrderModel.findAll()
       .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+
+  // get all tukang data
+  static getAllTukangData(req, res, next) {
+    TukangModel.getAll()
+      .then((data) => {
+        console.log(data);
         res.status(200).json(data);
       })
       .catch((err) => {
