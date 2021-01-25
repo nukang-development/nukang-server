@@ -48,7 +48,13 @@ router.put(
   upload.array("url"),
   TukangController.uploadImages
 );
-router.put("/:id/avatar", avatar.single("avatar"));
+router.put(
+  "/:id/avatar",
+  avatar.single("avatar"),
+  authentication,
+  authorization_tukang,
+  TukangController.uploadAvatar
+);
 router.post("/login", TukangController.loginTukang);
 router.get(
   "/:id",

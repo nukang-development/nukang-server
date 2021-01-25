@@ -5,23 +5,24 @@ const { compare } = require("../helpers/bcrypt-helper");
 const { encode } = require("../helpers/jwt-helper");
 
 class AdminController {
-  static async loginAdmin(req, res, next) {
-    try {
-      const data = await AdminModel.login({
-        email: req.body.email,
+  static loginAdmin(req, res, next) {
+    AdminModel.login({
+      email: req.body.email,
+    })
+      .then((data) => {
+        if (!data) {
+          throw {
+            status: 400,
+            message: "Invalid Account",
+          };
+        } else if (compare(req.body.password, data.password)) {
+          const access_token = encode(data);
+          res.status(200).json({ access_token: access_token, id: data._id });
+        }
       })
-      if (!data) {
-        throw {
-          status: 400,
-          message: "Invalid Account",
-        };
-      } else if (compare(req.body.password, data.password)) {
-        const access_token = encode(data);
-        res.status(200).json({ access_token: access_token, id: data._id });
-      }
-    } catch (error) {
-      next(error)
-    }
+      .catch((err) => {
+        next(err);
+      });
   }
   static async registerAdmin(req, res, next) {
     try {
@@ -47,7 +48,7 @@ class AdminController {
       if (req.body.username === "") {
         throw {
           status: 400,
-          message: "Please Fill Username",
+          message: "Please Fill Email",
         };
       } else {
         const data = await AdminModel.createOne({
@@ -68,6 +69,7 @@ class AdminController {
           big_project_desc: data.big_project_desc,
           big_project_price: data.big_project_price,
           portofolio_img: data.portofolio_img,
+          avatar_img: data.avatar_img,
         });
       }
     } catch (error) {
@@ -91,23 +93,26 @@ class AdminController {
     }
   }
 
-  static async findAllOrder(req, res, next) {
-    try {
-      const data = await OrderModel.findAll()
-      res.status(200).json(data);
-    } catch (error) {
-      next(error)
-    }
+  static findAllOrder(req, res, next) {
+    OrderModel.findAll()
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        next(err);
+      });
   }
 
   // get all tukang data
-  static async getAllTukangData(req, res, next) {
-    try {
-      const data = await TukangModel.getAll()
-      res.status(200).json(data);
-    } catch (error) {
-      next(error)
-    }
+  static getAllTukangData(req, res, next) {
+    TukangModel.getAll()
+      .then((data) => {
+        console.log(data);
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        next(err);
+      });
   }
 }
 
