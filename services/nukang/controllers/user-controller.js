@@ -63,9 +63,7 @@ class UserController {
     try {
       if (req.body.userId) {
         const userData = await UserModel.findOneProfile(req.body.userId);
-        console.log(userData);
         const tukangData = await TukangModel.findOne(req.body.tukangId);
-        console.log(tukangData);
         const data = await OrderModel.createOne({
           userId: req.body.userId,
           userName: userData.name,
@@ -105,17 +103,23 @@ class UserController {
   }
 
   // user selesai order
-  static updateOrderDone(req, res, next) {
-    OrderModel.updateDone({
-      id: req.params.id,
-      comment: req.body.comment,
-    })
-      .then((data) => {
-        res.status(201).json(data.value);
-      })
-      .catch((err) => {
-        next(err);
-      });
+  static async updateOrderDone(req, res, next) {
+    try {
+      if (!Number(req.params.id)) {
+        const data = await OrderModel.updateDone({
+          id: req.params.id,
+          comment: req.body.comment,
+        })
+        res.status(200).json(data.value);
+      } else {
+        throw {
+          status: 404,
+          message: "Error Not Found"
+        }
+      }
+    } catch (error) {
+      next(error)
+    }
   }
 
   // get detail profile tukang
@@ -147,29 +151,34 @@ class UserController {
     }
   }
 
-  static getUserProfile(req, res, next) {
-    UserModel.findOneProfile(req.params.id)
-      .then((data) => {
-        console.log(data, "profile");
-        res
-          .status(200)
-          .json({ id: data._id, email: data.email, name: data.name });
-      })
-      .catch((err) => {
-        next(err);
-      });
+  static async getUserProfile(req, res, next) {
+    try {
+      if (!Number(req.params.id)) {
+        const data = await UserModel.findOneProfile(req.params.id)
+        res.status(200).json({
+          id: data._id,
+          email: data.email,
+          name: data.name
+        });
+      } else {
+        throw {
+          status: 404,
+          message: "Error Not Found"
+        }
+      }
+    } catch (error) {
+      next(error)
+    }
   }
 
   // get all tukang data
-  static getAllTukangData(req, res, next) {
-    TukangModel.getAll()
-      .then((data) => {
-        console.log(data);
-        res.status(200).json(data);
-      })
-      .catch((err) => {
-        next(err);
-      });
+  static async getAllTukangData(req, res, next) {
+    try {
+      const data = await TukangModel.getAll()
+      res.status(200).json(data);
+    } catch (error) {
+      next(error)
+    }
   }
 }
 
