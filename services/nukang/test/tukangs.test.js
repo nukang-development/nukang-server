@@ -1,32 +1,40 @@
 const request = require('supertest')
 const app = require('../app')
 const { hash } = require('../helpers/bcrypt-helper')
-const { encode } = require("../helpers/jwt-helper")
+const { encode, decode } = require("../helpers/jwt-helper")
 const db = require("../config/mongo");
-const { ObjectID } = require('mongodb');
 const Tukang = db.collection("tukangs");
 const Order = db.collection("orders");
 const User = db.collection("users");
+const path = '/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/test/tes.txt'
 let tukangId
 let orderId
 let userId
 let user_access_token
+let tukang_access_token
 
 beforeAll(async done => {
   try {
     let hashedTukang = hash('thistukang')
     let hashedUser = hash('thisuser')
     const account_tukang = await Tukang.insertOne({
-      email: 'john@mail.com',
+      username: 'johndoe',
       password: hashedTukang,
-      role: "tukang",
+      role: 'tukang',
       name: "",
       location: "",
       category: "",
-      price: 0,
-      portofolio_img: []
+      small_project_desc: "",
+      small_project_price: 0,
+      medium_project_desc: "",
+      medium_project_price: 0,
+      big_project_desc: "",
+      big_project_price: 0,
+      portofolio_img: [],
+      avatar_img: {},
     })
     tukangId = account_tukang.ops[0]._id
+    tukang_access_token = encode(account_tukang.ops[0])
     const account_user = await User.insertOne({
       email: 'user1@mail.com',
       password: hashedUser,
@@ -48,9 +56,9 @@ beforeAll(async done => {
 })
 
 afterAll(done => {
-  Tukang.deleteOne({ _id: ObjectID(tukangId) })
-  User.deleteOne({ _id: ObjectID(userId) })
-  Order.deleteOne({ _id: ObjectID(orderId) })
+  Tukang.drop()
+  User.drop()
+  Order.drop()
   done()
 })
 
@@ -59,11 +67,25 @@ describe('Login Tukang POST /tukang/login', () => {
     test('Response with access token', async done => {
       try {
         const res = await request(app).post('/tukang/login')
-          .send({ email: 'john@mail.com', password: 'thistukang' })
+          .send({ username: 'johndoe', password: 'thistukang' })
         const { body, status } = res
-        tukang_access_token = res.body.access_token
         expect(status).toBe(200)
         expect(body).toHaveProperty('access_token', expect.any(String))
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Login Tukang Failed No Username', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).post('/tukang/login')
+          .send({ username: '', password: 'thistukang' })
+        const { body, status } = res
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('message', 'Please Fill Username')
         done()
       } catch (error) {
         done(error)
@@ -75,23 +97,9 @@ describe('Login Tukang POST /tukang/login', () => {
     test('Response with error message', async done => {
       try {
         const res = await request(app).post('/tukang/login')
-          .send({ email: 'n@mail.com', password: 'thiswrong' })
+          .send({ username: 'n', password: 'thiswrong' })
         const { body, status } = res
         expect(status).toBe(400)
-        expect(body).toHaveProperty('message', 'Invalid Account')
-        done()
-      } catch (error) {
-        done(error)
-      }
-    })
-  })
-
-  describe('Login Tukang Failed', () => {
-    test('Response with error message', async done => {
-      try {
-        const res = await request(app).post('/tukang/login')
-          .send({ email: 'n@mail.com' })
-        const { body } = res
         expect(body).toHaveProperty('message', 'Invalid Account')
         done()
       } catch (error) {
@@ -102,22 +110,70 @@ describe('Login Tukang POST /tukang/login', () => {
 })
 
 describe('Update Tukang PUT /tukang/:id', () => {
-  // describe('Update Tukang Success', () => {
-  //   test('Response updated tukang', async done => {
-  //     try {
-  //       const res = await request(app).put('/tukang/' + tukangId)
-  //         .set('access_token', tukang_access_token)
-  //         .set('content-type', 'application/octet-stream')
+  describe('Update Tukang Success', () => {
+    test('Response updated tukang', async done => {
+      try {
+        const res = await request(app).put('/tukang/' + tukangId)
+          .set('access_token', tukang_access_token)
+          .send({
+            name: 'John Doe',
+            location: 'Jakarta',
+            category: 'Tukang Bangunan',
+            small_project_desc: 'Project Kecil',
+            small_project_price: 100000,
+            medium_project_desc: 'Project Medium',
+            medium_project_price: 200000,
+            big_project_desc: 'Project Besar',
+            big_project_price: 300000
+          })
+        const { body, status } = res
+        expect(status).toBe(200)
+        expect(body).toBeDefined()
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
 
-  //       const imgStream = fs.createReadStream(testImage);
-  //       imgStream.on('end', () => req.end(done));
-  //       imgStream.pipe(req, { end: false })
-  //       done()
-  //     } catch (error) {
-  //       done(error)
-  //     }
-  //   })
-  // })
+  describe('Update Tukang Failed Error Not Found', () => {
+    test('Response updated error message', async done => {
+      try {
+        const res = await request(app).put('/tukang/2')
+          .set('access_token', tukang_access_token)
+          .send({
+            name: 'John Doe',
+            location: 'Jakarta',
+            category: 'Tukang Bangunan',
+            small_project_desc: 'Project Kecil',
+            small_project_price: 100000,
+            medium_project_desc: 'Project Medium',
+            medium_project_price: 200000,
+            big_project_desc: 'Project Besar',
+            big_project_price: 300000
+          })
+        const { body, status } = res
+        expect(status).toBe(404)
+        expect(body).toHaveProperty('message', 'Error Not Found')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+})
+
+describe('Upload Image', () => {
+  describe('Upload Image Success', () => {
+    it('response image upload success', async done => {
+      const res = await request(app).put(`/tukang/${tukangId}/avatar`)
+        .set('access_token', tukang_access_token)
+        .attach('file', path)
+      const { body, status } = res
+      expect(status).toBe(201)
+      done()
+    })
+  })
 })
 
 describe('Find One Tukang GET /tukang/:id', () => {
@@ -364,7 +420,7 @@ describe('Update Order Rejected Put /tukang/order/:id/rejected/', () => {
     })
   })
 
-  describe('update Order Rejected Failed No Tukang Access Token', () => {
+  describe('Update Order Rejected Failed No Tukang Access Token', () => {
     test('Response with error message', async done => {
       try {
         const res = await request(app).put(`/tukang/order/${orderId}/rejected/`)
@@ -383,7 +439,7 @@ describe('Update Order Rejected Put /tukang/order/:id/rejected/', () => {
     })
   })
 
-  describe('update Order List Error Not Found', () => {
+  describe('Update Order List Error Not Found', () => {
     test('Response with error message', async done => {
       try {
         const res = await request(app).put(`/tukang/order/2/rejected/`)
