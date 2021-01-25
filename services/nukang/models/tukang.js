@@ -28,7 +28,6 @@ class TukangModel {
   }
 
   static updateImages(payload) {
-    console.log(payload);
     return Tukang.findOneAndUpdate(
       {
         _id: ObjectId(payload.id),
@@ -45,7 +44,6 @@ class TukangModel {
   }
 
   static updateAvatar(payload) {
-    console.log(payload);
     return Tukang.findOneAndUpdate(
       {
         _id: ObjectId(payload.id),
@@ -63,7 +61,7 @@ class TukangModel {
 
   static login(payload) {
     return Tukang.findOne({
-      email: payload.email,
+      username: payload.username,
     });
   }
 
