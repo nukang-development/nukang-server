@@ -6,21 +6,22 @@ const imgur = require("imgur");
 
 class TukangController {
   // update profile tukang
-  static updateTukang(req, res) {
-    TukangModel.updateOne({
-      id: req.params.id,
-      name: req.body.name,
-      location: req.body.location,
-      category: req.body.category,
-      small_project_desc: req.body.small_project_desc,
-      small_project_price: req.body.small_project_price,
-      medium_project_desc: req.body.medium_project_desc,
-      medium_project_price: req.body.medium_project_price,
-      big_project_desc: req.body.big_project_desc,
-      big_project_price: req.body.big_project_price,
-    })
-      .then((data) => {
-        res.status(201).json({
+  static async updateTukang(req, res) {
+    try {
+      if (!Number(req.params.id)) {
+        const data = await TukangModel.updateOne({
+          id: req.params.id,
+          name: req.body.name,
+          location: req.body.location,
+          category: req.body.category,
+          small_project_desc: req.body.small_project_desc,
+          small_project_price: req.body.small_project_price,
+          medium_project_desc: req.body.medium_project_desc,
+          medium_project_price: req.body.medium_project_price,
+          big_project_desc: req.body.big_project_desc,
+          big_project_price: req.body.big_project_price,
+        })
+        res.status(200).json({
           name: data.value.name,
           location: data.value.location,
           category: data.value.category,
@@ -30,74 +31,54 @@ class TukangController {
           medium_project_price: data.value.medium_project_price,
           big_project_desc: data.value.big_project_desc,
           big_project_price: data.value.big_project_price,
-        });
-      })
-      .catch((err) => {
-        next(err);
-      });
-  }
-
-  static uploadImages(req, res, next) {
-    let encodedImgArray = [];
-    if (req.files.length !== 0) {
-      for (let i = 0; i < req.files.length; i++) {
-        encodedImgArray.push(req.files[i].buffer.toString("base64"));
-      }
-      imgur
-        .uploadImages(encodedImgArray, "Base64")
-        .then((images) => {
-          return TukangModel.updateImages({
-            id: req.params.id,
-            portofolio_img: images,
-          })
-            .then((data) => {
-              res.status(201).json({
-                portofolio_img: data.value.portofolio_img,
-              });
-            })
-            .catch((err) => {
-              next(err);
-            });
         })
-        .catch((err) => {
-          next(err);
-        });
-    } else {
-      throw {
-        status: 404,
-        message: "Error Not Found",
-      };
+      } else {
+        throw {
+          status: 404,
+          message: "Error Not Found"
+        }
+      }
+    } catch (error) {
+      next(error)
     }
   }
 
-  static uploadAvatar(req, res, next) {
-    if (req.file.length !== 0) {
-      const encoded_avatar = req.file.buffer.toString("base64");
-
-      imgur
-        .uploadBase64(encoded_avatar)
-        .then((image) => {
-          return TukangModel.updateAvatar({
-            id: req.params.id,
-            avatar_img: image,
-          })
-            .then((data) => {
-              res.status(201).json({
-                avatar_img: data.value.avatar_img,
-              });
-            })
-            .catch((err) => {
-              next(err);
-            });
+  static async uploadImages(req, res, next) {
+    try {
+      let encodedImgArray = [];
+      if (req.files.length !== 0) {
+        for (let i = 0; i < req.files.length; i++) {
+          encodedImgArray.push(req.files[i].buffer.toString("base64"));
+        }
+        const images = await imgur.uploadImages(encodedImgArray, "Base64")
+        const data = await TukangModel.updateImages({
+          id: req.params.id,
+          portofolio_img: images
         })
-        .catch((err) => {
-          next(err);
+        res.status(201).json({
+          portofolio_img: data.value.portofolio_img,
         });
-    } else {
-      throw {
-        status: 404,
-        message: "Error Not Found",
-      };
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async uploadAvatar(req, res, next) {
+    try {
+      if (req.file.length !== 0) {
+        const encoded_avatar = req.file.buffer.toString("base64");
+        const images = await imgur.uploadBase64(encoded_avatar)
+        const data = await TukangModel.updateAvatar({
+          id: req.params.id,
+          avatar_img: image,
+        })
+        res.status(201).json({
+          avatar_img: data.value.avatar_img,
+        });
+      }
+    } catch (error) {
+      next(error)
     }
   }
 
@@ -129,24 +110,31 @@ class TukangController {
     }
   }
 
-  static loginTukang(req, res, next) {
-    TukangModel.login({
-      email: req.body.email,
-    })
-      .then((data) => {
+  static async loginTukang(req, res, next) {
+    try {
+      if (req.body.username === "") {
+        throw {
+          status: 400,
+          message: "Please Fill Username",
+        };
+      } else {
+        const data = await TukangModel.login({
+          username: req.body.username,
+        })
         if (!data) {
           throw {
             status: 400,
             message: "Invalid Account",
           };
         } else if (compare(req.body.password, data.password)) {
+          console.log(data);
           const access_token = encode(data);
           res.status(200).json({ access_token: access_token, id: data._id });
         }
-      })
-      .catch((err) => {
-        next(err);
-      });
+      }
+    } catch (error) {
+      next(error)
+    }
   }
 
   static async findByTukang(req, res, next) {
