@@ -26,6 +26,7 @@ beforeAll(async done => {
 
 afterAll(done => {
   Admin.drop()
+  User.drop()
   done()
 })
 
