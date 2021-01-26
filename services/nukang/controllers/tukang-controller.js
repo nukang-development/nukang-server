@@ -45,8 +45,8 @@ class TukangController {
 
   static async uploadImages(req, res, next) {
     try {
-      let encodedImgArray = [];
-      if (req.files.length !== 0) {
+      if (req.files[0].mimetype !== 'text/plain' && req.files.length !== 0) {
+        let encodedImgArray = [];
         for (let i = 0; i < req.files.length; i++) {
           encodedImgArray.push(req.files[i].buffer.toString("base64"));
         }
@@ -58,6 +58,11 @@ class TukangController {
         res.status(201).json({
           portofolio_img: data.value.portofolio_img,
         });
+      } else {
+        throw {
+          status: 400,
+          message: "Please upload the image"
+        }
       }
     } catch (error) {
       next(error);
@@ -66,7 +71,7 @@ class TukangController {
 
   static async uploadAvatar(req, res, next) {
     try {
-      if (req.file.length !== 0) {
+      if (req.file.mimetype !== 'text/plain' && req.file.length !== 0) {
         const encoded_avatar = req.file.buffer.toString("base64");
         const image = await imgur.uploadBase64(encoded_avatar);
         const data = await TukangModel.updateAvatar({
@@ -74,6 +79,11 @@ class TukangController {
           avatar_img: image.data,
         });
         res.status(201).json(data.value.avatar_img);
+      } else {
+        throw {
+          status: 400,
+          message: "Please upload the image"
+        }
       }
     } catch (error) {
       next(error);
@@ -128,6 +138,11 @@ class TukangController {
         } else if (compare(req.body.password, data.password)) {
           const access_token = encode(data);
           res.status(200).json({ access_token: access_token, id: data._id });
+        } else {
+          throw {
+            status: 400,
+            message: "Invalid Account",
+          };
         }
       }
     } catch (error) {
