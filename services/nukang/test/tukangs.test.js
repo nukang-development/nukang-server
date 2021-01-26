@@ -6,7 +6,8 @@ const db = require("../config/mongo");
 const Tukang = db.collection("tukangs");
 const Order = db.collection("orders");
 const User = db.collection("users");
-const path = '/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/test/tes.txt'
+const path = '/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/test/tes.jpeg'
+const notImgPath = '/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/test/tes.txt'
 let tukangId
 let orderId
 let userId
@@ -107,6 +108,21 @@ describe('Login Tukang POST /tukang/login', () => {
       }
     })
   })
+
+  describe('Login Tukang Failed Invalid Account', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).post('/tukang/login')
+          .send({ username: 'johndoe', password: 'thiswrong' })
+        const { body, status } = res
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('message', 'Invalid Account')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
 })
 
 describe('Update Tukang PUT /tukang/:id', () => {
@@ -165,12 +181,55 @@ describe('Update Tukang PUT /tukang/:id', () => {
 
 describe('Upload Image', () => {
   describe('Upload Image Success', () => {
-    it('response image upload success', async done => {
+    test('response image upload success', async done => {
       const res = await request(app).put(`/tukang/${tukangId}/avatar`)
         .set('access_token', tukang_access_token)
-        .attach('file', path)
+        .set("Content-Type", "multipart/form-data")
+        .attach('avatar', path)
       const { body, status } = res
       expect(status).toBe(201)
+      done()
+    })
+  })
+
+
+  describe('Upload Image Failed Not Image Type', () => {
+    test('response error message', async done => {
+      const res = await request(app).put(`/tukang/${tukangId}/avatar`)
+        .set('access_token', tukang_access_token)
+        .set("Content-Type", "multipart/form-data")
+        .attach('avatar', notImgPath)
+      const { body, status } = res
+      expect(status).toBe(400)
+      done()
+    })
+  })
+})
+
+describe('Upload Images', () => {
+  describe('Upload Images Success', () => {
+    test('response images upload success', async done => {
+      const res = await request(app).put(`/tukang/${tukangId}/upload`)
+        .set('access_token', tukang_access_token)
+        .set("Content-Type", "multipart/form-data")
+        .attach('url', path)
+        .attach('url', path)
+      const { body, status } = res
+      expect(status).toBe(201)
+      done()
+    })
+  })
+
+
+  describe('Upload Images Failed', () => {
+    test('response error message', async done => {
+      const res = await request(app).put(`/tukang/${tukangId}/upload`)
+        .set('access_token', tukang_access_token)
+        .set("Content-Type", "multipart/form-data")
+        .attach('url', notImgPath)
+        .attach('url', notImgPath)
+      const { body, status } = res
+      expect(status).toBe(400)
       done()
     })
   })
