@@ -30,7 +30,7 @@ beforeAll(async done => {
       big_project_desc: "",
       big_project_price: 0,
       portofolio_img: [],
-      avatar_img: {},
+      avatar_img: "",
     })
     idTukang = account_tukang.ops[0]._id
     nouser_access_token = encode(account_tukang.ops[0])
@@ -534,7 +534,7 @@ describe('Get All Tukang Data', () => {
         expect(body[0]).toHaveProperty('big_project_desc', expect.any(String))
         expect(body[0]).toHaveProperty('big_project_price', expect.any(Number))
         expect(body[0]).toHaveProperty('portofolio_img', expect.any(Array))
-        expect(body[0]).toHaveProperty('avatar_img', expect.any(Object))
+        expect(body[0]).toHaveProperty('avatar_img', expect.any(String))
         done()
       } catch (error) {
         done(error)

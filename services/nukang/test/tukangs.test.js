@@ -42,7 +42,7 @@ beforeAll(async done => {
       role: "user"
     })
     userId = account_user.ops[0]._id
-    user_access_token = encode(account_user)
+    user_access_token = encode(account_user.ops[0])
     const user_order = await Order.insertOne({
       userId: userId,
       tukangId: tukangId,
@@ -179,7 +179,7 @@ describe('Update Tukang PUT /tukang/:id', () => {
   })
 })
 
-describe('Upload Image', () => {
+describe('Upload Image Avatar PUT /tukang/:id/avatar', () => {
   describe('Upload Image Success', () => {
     test('response image upload success', async done => {
       const res = await request(app).put(`/tukang/${tukangId}/avatar`)
@@ -206,7 +206,7 @@ describe('Upload Image', () => {
   })
 })
 
-describe('Upload Images', () => {
+describe('Upload Images Portofolio PUT /tukang/:id/upload', () => {
   describe('Upload Images Success', () => {
     test('response images upload success', async done => {
       const res = await request(app).put(`/tukang/${tukangId}/upload`)
@@ -219,7 +219,6 @@ describe('Upload Images', () => {
       done()
     })
   })
-
 
   describe('Upload Images Failed', () => {
     test('response error message', async done => {

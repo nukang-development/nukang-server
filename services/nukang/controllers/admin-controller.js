@@ -107,7 +107,6 @@ class AdminController {
   static getAllTukangData(req, res, next) {
     TukangModel.getAll()
       .then((data) => {
-        console.log(data);
         res.status(200).json(data);
       })
       .catch((err) => {
