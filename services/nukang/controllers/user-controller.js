@@ -109,16 +109,16 @@ class UserController {
         const data = await OrderModel.updateDone({
           id: req.params.id,
           comment: req.body.comment,
-        })
+        });
         res.status(200).json(data.value);
       } else {
         throw {
           status: 404,
-          message: "Error Not Found"
-        }
+          message: "Error Not Found",
+        };
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -139,6 +139,7 @@ class UserController {
           big_project_desc: data.big_project_desc,
           big_project_price: data.big_project_price,
           portofolio_img: data.portofolio_img,
+          avatar_image: data.avatar_image.link,
         });
       } else {
         throw {
@@ -154,30 +155,30 @@ class UserController {
   static async getUserProfile(req, res, next) {
     try {
       if (!Number(req.params.id)) {
-        const data = await UserModel.findOneProfile(req.params.id)
+        const data = await UserModel.findOneProfile(req.params.id);
         res.status(200).json({
           id: data._id,
           email: data.email,
-          name: data.name
+          name: data.name,
         });
       } else {
         throw {
           status: 404,
-          message: "Error Not Found"
-        }
+          message: "Error Not Found",
+        };
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
   // get all tukang data
   static async getAllTukangData(req, res, next) {
     try {
-      const data = await TukangModel.getAll()
+      const data = await TukangModel.getAll();
       res.status(200).json(data);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 }

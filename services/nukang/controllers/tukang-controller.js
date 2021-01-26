@@ -96,6 +96,7 @@ class TukangController {
           big_project_desc: data.big_project_desc,
           big_project_price: data.big_project_price,
           portofolio_img: data.portofolio_img,
+          avatar_img: data.avatar_img.link,
         });
       } else {
         throw {
