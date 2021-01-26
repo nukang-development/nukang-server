@@ -243,7 +243,6 @@ describe('Add Order POST /user/order/', () => {
   })
 })
 
-
 describe('Find All by User Get /user/order/', () => {
   describe('Get Order List Success', () => {
     test('Response with order list', async done => {
@@ -271,7 +270,7 @@ describe('Find All by User Get /user/order/', () => {
 
 
   describe('Get Order List Failed No User Access Token', () => {
-    test('Response with order list', async done => {
+    test('Response with error message', async done => {
       try {
         const res = await request(app).get('/user/order/' + idUser)
           .set('access_token', nouser_access_token)
@@ -361,7 +360,7 @@ describe('Find Tukang Detail Get /user/tukang/:id/detail', () => {
   })
 
   describe('Get Tukang Detail Error Not Found', () => {
-    test('Response with order list', async done => {
+    test('Response with error message', async done => {
       try {
         const res = await request(app).get('/user/tukang/2/detail')
           .set('access_token', access_token)
@@ -376,7 +375,7 @@ describe('Find Tukang Detail Get /user/tukang/:id/detail', () => {
   })
 })
 
-describe('Update Order Done', () => {
+describe('Update Order Done PUT /user/order/:id/done', () => {
   describe('Update Order Done Success', () => {
     test('Response with updated order', async done => {
       try {
@@ -414,7 +413,7 @@ describe('Update Order Done', () => {
   })
 
   describe('Update Order Done Failed No Access Token', () => {
-    test('Response with updated order', async done => {
+    test('Response with error message', async done => {
       try {
         const res = await request(app).put(`/user/order/${idTukang}/done`)
           .send({
@@ -449,7 +448,7 @@ describe('Update Order Done', () => {
   })
 })
 
-describe('Get User Profile', () => {
+describe('Find One User Profile GET /user/:id', () => {
   describe('Get User Profile Success', () => {
     test('Response with user profile', async done => {
       try {
@@ -468,7 +467,7 @@ describe('Get User Profile', () => {
   })
 
   describe('Get User Profile Failed No User Access Token', () => {
-    test('Response with user profile', async done => {
+    test('Response with error message', async done => {
       try {
         const res = await request(app).get(`/user/${idUser}` )
           .set('access_token', nouser_access_token)
@@ -483,7 +482,7 @@ describe('Get User Profile', () => {
   })
 
   describe('Get User Profile Failed No Access Token', () => {
-    test('Response with user profile', async done => {
+    test('Response with error message', async done => {
       try {
         const res = await request(app).get(`/user/${idUser}` )
         const { body, status } = res
@@ -512,7 +511,7 @@ describe('Get User Profile', () => {
   })
 })
 
-describe('Get All Tukang Data', () => {
+describe('Find All Tukang Data GET /user/tukang', () => {
   describe('Get All Tukang Data Success', () => {
     test('Response with tukang data', async done => {
       try {
@@ -543,7 +542,7 @@ describe('Get All Tukang Data', () => {
   })
 
   describe('Get All Tukang Data Failed No User Access Token', () => {
-    test('Response with tukang data', async done => {
+    test('Response with error message', async done => {
       try {
         const res = await request(app).get(`/user/tukang` )
           .set('access_token', nouser_access_token)
@@ -558,7 +557,7 @@ describe('Get All Tukang Data', () => {
   })
 
   describe('Get All Tukang Data Failed No Access Token', () => {
-    test('Response with tukang data', async done => {
+    test('Response with error message', async done => {
       try {
         const res = await request(app).get(`/user/tukang` )
         const { body, status } = res

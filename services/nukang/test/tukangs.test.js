@@ -236,7 +236,7 @@ describe('Upload Images Portofolio PUT /tukang/:id/upload', () => {
 
 describe('Find One Tukang GET /tukang/:id', () => {
   describe('Find Tukang Success', () => {
-    test('Response updated tukang', async done => {
+    test('Response with tukang', async done => {
       try {
         const res = await request(app).get('/tukang/' + tukangId)
           .set('access_token', tukang_access_token)
@@ -296,9 +296,9 @@ describe('Find One Tukang GET /tukang/:id', () => {
   })
 })
 
-describe('Update Order Accepted Put /tukang/order/:id/accepted/', () => {
-  describe('Update Order List Success', () => {
-    test('Response with order list', async done => {
+describe('Update Order Accepted PUT /tukang/order/:id/accepted/', () => {
+  describe('Update Order Accepted Success', () => {
+    test('Response with status accepted order', async done => {
       try {
         const res = await request(app).put(`/tukang/order/${orderId}/accepted/`)
           .set('access_token', tukang_access_token)
@@ -376,9 +376,9 @@ describe('Update Order Accepted Put /tukang/order/:id/accepted/', () => {
 
 })
 
-describe('Find All by Tukang Get /tukang/order/:id', () => {
-  describe('Get Order List Success', () => {
-    test('Respond with status 200', async (done) => {
+describe('Find All by Tukang GET /tukang/order/:id', () => {
+  describe('Get Order By Tukang Success', () => {
+    test('Response with order by tukang', async (done) => {
       try {
         const res = await request(app)
           .get('/tukang/order/' + tukangId)
@@ -438,9 +438,9 @@ describe('Find All by Tukang Get /tukang/order/:id', () => {
 })
 
 
-describe('Update Order Rejected Put /tukang/order/:id/rejected/', () => {
-  describe('update Order List Success', () => {
-    test('Response with order list', async done => {
+describe('Update Order Rejected PUT /tukang/order/:id/rejected/', () => {
+  describe('update Order Rejected Success', () => {
+    test('Response with status rejected', async done => {
       try {
         const res = await request(app).put(`/tukang/order/${orderId}/rejected/`)
           .set('access_token', tukang_access_token)
