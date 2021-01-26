@@ -172,6 +172,24 @@ class UserController {
     }
   }
 
+  // find order by tukang
+  static async findOrderByTukang(req, res, next) {
+    console.log("masuk");
+    try {
+      if (!Number(req.params.id)) {
+        const data = await OrderModel.findAllbyTukang(req.params.id);
+        res.status(200).json(data);
+      } else {
+        throw {
+          status: 404,
+          message: "Error Not Found",
+        };
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // get all tukang data
   static async getAllTukangData(req, res, next) {
     try {

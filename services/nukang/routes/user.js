@@ -24,6 +24,13 @@ router.get(
   UserController.findByUser
 );
 router.get(
+  "/order/bytukang/:id",
+  authentication,
+  authorization_user,
+  UserController.findOrderByTukang
+);
+
+router.get(
   "/tukang",
   authentication,
   authorization_user,
