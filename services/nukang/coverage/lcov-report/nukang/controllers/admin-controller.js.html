@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.97% </span>
+                <span class="strong">94.59% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>32/33</span>
+                <span class='fraction'>35/37</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.89% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>8/9</span>
+                <span class='fraction'>10/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.97% </span>
+                <span class="strong">94.59% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>32/33</span>
+                <span class='fraction'>35/37</span>
             </div>
         
             
@@ -164,10 +164,22 @@
 <a name='L105'></a><a href='#L105'>105</a>
 <a name='L106'></a><a href='#L106'>106</a>
 <a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -209,7 +221,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -238,8 +249,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -270,8 +281,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const AdminModel = require("../models/admin");
+const TukangModel = require("../models/tukang");
 const OrderModel = require("../models/order");
 const { compare } = require("../helpers/bcrypt-helper");
 const { encode } = require("../helpers/jwt-helper");
@@ -289,7 +312,7 @@ class AdminController {
           };
         } else <span class="missing-if-branch" title="else path not taken" >E</span>if (compare(req.body.password, data.password)) {
           const access_token = encode(data);
-          res.status(200).json({ access_token: access_token });
+          res.status(200).json({ access_token: access_token, id: data._id });
         }
       })
       .catch((err) =&gt; {
@@ -301,73 +324,83 @@ class AdminController {
       if (req.body.email === "") {
         throw {
           status: 400,
-          message: "Please Fill Email"
-        }
+          message: "Please Fill Email",
+        };
       } else {
         const data = await AdminModel.register({
           email: req.body.email,
           password: req.body.password,
-        })
+        });
         res.status(201).json({ id: data._id, email: data.email });
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
-&nbsp;
   }
 &nbsp;
   static async createTukang(req, res, next) {
     try {
-      if (req.body.email === "") {
+      if (req.body.username === "") {
         throw {
           status: 400,
-          message: "Please Fill Email"
-        }
+          message: "Please Fill Username",
+        };
       } else {
         const data = await AdminModel.createOne({
-          email: req.body.email,
+          username: req.body.username,
           password: req.body.password,
-        })
+        });
         res.status(201).json({
           id: data._id,
-          email: data.email,
+          username: data.username,
           role: data.role,
           name: data.name,
           location: data.location,
           category: data.category,
-          small_project_desc: data.small_project,
+          small_project_desc: data.small_project_desc,
           small_project_price: data.small_project_price,
-          medium_project_desc: data.medium_project,
-          medim_project_price: data.medium_project_price,
-          big_project_desc: data.big_project,
+          medium_project_desc: data.medium_project_desc,
+          medium_project_price: data.medium_project_price,
+          big_project_desc: data.big_project_desc,
           big_project_price: data.big_project_price,
           portofolio_img: data.portofolio_img,
+          avatar_img: data.avatar_img,
         });
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
-&nbsp;
   }
 &nbsp;
   static async deleteTukang(req, res, next) {
     try {
       if (!Number(req.params.id)) {
-        const data = await AdminModel.deleteOne(req.params.id)
+        const data = await AdminModel.deleteOne(req.params.id);
         res.status(200).json({ message: "success delete" });
       } else {
         throw {
           status: 404,
-          message: "Error Not Found"
-        }
+          message: "Error Not Found",
+        };
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 &nbsp;
   static findAllOrder(req, res, next) {
     OrderModel.findAll()
+      .then((data) =&gt; {
+        res.status(200).json(data);
+      })
+      .catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {
+<span class="cstat-no" title="statement not covered" >        next(err);</span>
+      });
+  }
+&nbsp;
+  // get all tukang data
+  static getAllTukangData(req, res, next) {
+    TukangModel.getAll()
       .then((data) =&gt; {
         res.status(200).json(data);
       })
@@ -385,7 +418,7 @@ module.exports = AdminController;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Jan 25 2021 08:54:36 GMT+0700 (Western Indonesia Time)
+                at Tue Jan 26 2021 16:18:29 GMT+0700 (Western Indonesia Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

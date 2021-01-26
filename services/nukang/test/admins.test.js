@@ -35,7 +35,7 @@ let admin_access_token
 
 describe('Register Admin POST /admin/register', () => {
   describe('Register Admin Success', () => {
-    test('Response with access token', async done => {
+    test('Response with id and email admin', async done => {
       try {
         const res = await request(app).post('/admin/register')
           .send({ email: 'admin@mail.com', password: 'thisadmin', role: 'admin' })
@@ -200,9 +200,9 @@ describe('Add Tukang POST /admin/tukang', () => {
   })
 })
 
-describe('Delete Tukang /admin/tukang/:id', () => {
+describe('Delete Tukang DELETE /admin/tukang/:id', () => {
   describe('Delete Tukang Success', () => {
-    test('Response delete tukang', async done => {
+    test('Response delete tukang success', async done => {
       const res = await request(app).delete('/admin/tukang/' + tukangId)
         .set('access_token', admin_access_token)
       try {
@@ -261,7 +261,7 @@ describe('Delete Tukang /admin/tukang/:id', () => {
   })
 })
 
-describe('Find All Order Get /admin/order', () => {
+describe('Find All Order GET /admin/order', () => {
   describe('Get Order List Success', () => {
     test('Response with order list', async done => {
       try {
@@ -307,10 +307,9 @@ describe('Find All Order Get /admin/order', () => {
   })
 })
 
-
-describe('Find All Tukang Get /admin/all-tukang', () => {
+describe('Find All Tukang GET /admin/all-tukang', () => {
   describe('Get Tukang List Success', () => {
-    test('Response with order list', async done => {
+    test('Response with tukang list', async done => {
       try {
         const res = await request(app).get('/admin/all-tukang')
           .set('access_token', admin_access_token)
