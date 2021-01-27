@@ -8,10 +8,10 @@ module.exports = {
         email: user.email,
         role: user.role,
       },
-      "nukang"
+      process.env.JWT
     );
   },
   decode(token) {
-    return jwt.verify(token, "nukang");
+    return jwt.verify(token, process.env.JWT);
   },
 };
