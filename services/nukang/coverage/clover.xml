@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1611652709315" clover="3.2.0">
-  <project timestamp="1611652709315" name="All files">
-    <metrics statements="315" coveredstatements="312" conditionals="62" coveredconditionals="61" methods="61" coveredmethods="59" elements="438" coveredelements="432" complexity="0" loc="315" ncloc="315" packages="7" files="20" classes="20"/>
+<coverage generated="1611712639439" clover="3.2.0">
+  <project timestamp="1611712639439" name="All files">
+    <metrics statements="323" coveredstatements="320" conditionals="64" coveredconditionals="63" methods="62" coveredmethods="60" elements="449" coveredelements="443" complexity="0" loc="323" ncloc="323" packages="7" files="20" classes="20"/>
     <package name="nukang">
-      <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="app.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/app.js">
-        <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="3" type="stmt"/>
         <line num="2" count="3" type="stmt"/>
         <line num="3" count="3" type="stmt"/>
         <line num="4" count="3" type="stmt"/>
         <line num="5" count="3" type="stmt"/>
         <line num="6" count="3" type="stmt"/>
-        <line num="8" count="3" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
         <line num="9" count="3" type="stmt"/>
         <line num="10" count="3" type="stmt"/>
         <line num="11" count="3" type="stmt"/>
         <line num="12" count="3" type="stmt"/>
-        <line num="14" count="3" type="stmt"/>
+        <line num="13" count="3" type="stmt"/>
+        <line num="15" count="3" type="stmt"/>
       </file>
     </package>
     <package name="nukang.config">
@@ -34,7 +35,7 @@
       </file>
     </package>
     <package name="nukang.controllers">
-      <metrics statements="162" coveredstatements="159" conditionals="52" coveredconditionals="51" methods="28" coveredmethods="26"/>
+      <metrics statements="168" coveredstatements="165" conditionals="54" coveredconditionals="53" methods="29" coveredmethods="27"/>
       <file name="admin-controller.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/controllers/admin-controller.js">
         <metrics statements="37" coveredstatements="35" conditionals="10" coveredconditionals="9" methods="12" coveredmethods="10"/>
         <line num="1" count="3" type="stmt"/>
@@ -92,7 +93,7 @@
         <line num="48" count="2" type="cond" truecount="4" falsecount="0"/>
         <line num="49" count="1" type="stmt"/>
         <line num="50" count="1" type="stmt"/>
-        <line num="51" count="2" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
         <line num="53" count="1" type="stmt"/>
         <line num="54" count="1" type="stmt"/>
         <line num="58" count="1" type="stmt"/>
@@ -144,7 +145,7 @@
         <line num="202" count="3" type="stmt"/>
       </file>
       <file name="user-controller.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/controllers/user-controller.js">
-        <metrics statements="60" coveredstatements="59" conditionals="18" coveredconditionals="18" methods="8" coveredmethods="8"/>
+        <metrics statements="66" coveredstatements="65" conditionals="20" coveredconditionals="20" methods="9" coveredmethods="9"/>
         <line num="1" count="3" type="stmt"/>
         <line num="2" count="3" type="stmt"/>
         <line num="3" count="3" type="stmt"/>
@@ -200,11 +201,17 @@
         <line num="159" count="1" type="stmt"/>
         <line num="165" count="1" type="stmt"/>
         <line num="171" count="1" type="stmt"/>
-        <line num="177" count="1" type="stmt"/>
-        <line num="178" count="1" type="stmt"/>
+        <line num="177" count="2" type="stmt"/>
+        <line num="178" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="179" count="1" type="stmt"/>
-        <line num="181" count="0" type="stmt"/>
-        <line num="186" count="3" type="stmt"/>
+        <line num="180" count="1" type="stmt"/>
+        <line num="182" count="1" type="stmt"/>
+        <line num="188" count="1" type="stmt"/>
+        <line num="194" count="1" type="stmt"/>
+        <line num="195" count="1" type="stmt"/>
+        <line num="196" count="1" type="stmt"/>
+        <line num="198" count="0" type="stmt"/>
+        <line num="203" count="3" type="stmt"/>
       </file>
     </package>
     <package name="nukang.helpers">
@@ -221,7 +228,7 @@
         <line num="1" count="3" type="stmt"/>
         <line num="3" count="3" type="stmt"/>
         <line num="5" count="7" type="stmt"/>
-        <line num="15" count="46" type="stmt"/>
+        <line num="15" count="49" type="stmt"/>
       </file>
     </package>
     <package name="nukang.middlewares">
@@ -230,14 +237,14 @@
         <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="1" count="3" type="stmt"/>
         <line num="3" count="3" type="stmt"/>
-        <line num="4" count="59" type="stmt"/>
-        <line num="5" count="59" type="stmt"/>
-        <line num="6" count="59" type="cond" truecount="2" falsecount="0"/>
-        <line num="7" count="13" type="stmt"/>
-        <line num="12" count="46" type="stmt"/>
-        <line num="13" count="46" type="stmt"/>
-        <line num="14" count="46" type="stmt"/>
-        <line num="17" count="13" type="stmt"/>
+        <line num="4" count="63" type="stmt"/>
+        <line num="5" count="63" type="stmt"/>
+        <line num="6" count="63" type="cond" truecount="2" falsecount="0"/>
+        <line num="7" count="14" type="stmt"/>
+        <line num="12" count="49" type="stmt"/>
+        <line num="13" count="49" type="stmt"/>
+        <line num="14" count="49" type="stmt"/>
+        <line num="17" count="14" type="stmt"/>
       </file>
       <file name="authorization_admin.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/middlewares/authorization_admin.js">
         <metrics statements="6" coveredstatements="6" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
@@ -260,17 +267,17 @@
       <file name="authorization_user.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/middlewares/authorization_user.js">
         <metrics statements="6" coveredstatements="6" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="1" count="3" type="stmt"/>
-        <line num="2" count="17" type="stmt"/>
-        <line num="3" count="17" type="cond" truecount="2" falsecount="0"/>
-        <line num="4" count="6" type="stmt"/>
-        <line num="9" count="11" type="stmt"/>
-        <line num="12" count="6" type="stmt"/>
+        <line num="2" count="20" type="stmt"/>
+        <line num="3" count="20" type="cond" truecount="2" falsecount="0"/>
+        <line num="4" count="7" type="stmt"/>
+        <line num="9" count="13" type="stmt"/>
+        <line num="12" count="7" type="stmt"/>
       </file>
       <file name="errorHandler.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/middlewares/errorHandler.js">
         <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="1" count="3" type="stmt"/>
-        <line num="2" count="52" type="cond" truecount="2" falsecount="0"/>
-        <line num="3" count="50" type="stmt"/>
+        <line num="2" count="55" type="cond" truecount="2" falsecount="0"/>
+        <line num="3" count="53" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
       </file>
     </package>
@@ -304,7 +311,7 @@
         <line num="39" count="1" type="stmt"/>
         <line num="53" count="1" type="stmt"/>
         <line num="68" count="1" type="stmt"/>
-        <line num="72" count="1" type="stmt"/>
+        <line num="72" count="2" type="stmt"/>
         <line num="76" count="1" type="stmt"/>
         <line num="80" count="3" type="stmt"/>
       </file>
@@ -336,7 +343,7 @@
       </file>
     </package>
     <package name="nukang.routes">
-      <metrics statements="48" coveredstatements="48" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="49" coveredstatements="49" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="admin.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/routes/admin.js">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="3" type="stmt"/>
@@ -382,7 +389,7 @@
         <line num="65" count="3" type="stmt"/>
       </file>
       <file name="user.js" path="/home/opik/Desktop/hacktiv8/iniserser2/nukang-server/services/nukang/routes/user.js">
-        <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="3" type="stmt"/>
         <line num="2" count="3" type="stmt"/>
         <line num="3" count="3" type="stmt"/>
@@ -394,8 +401,9 @@
         <line num="20" count="3" type="stmt"/>
         <line num="26" count="3" type="stmt"/>
         <line num="33" count="3" type="stmt"/>
-        <line num="39" count="3" type="stmt"/>
+        <line num="40" count="3" type="stmt"/>
         <line num="46" count="3" type="stmt"/>
+        <line num="53" count="3" type="stmt"/>
       </file>
     </package>
   </project>

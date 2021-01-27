@@ -570,3 +570,74 @@ describe('Find All Tukang Data GET /user/tukang', () => {
     })
   })
 })
+
+describe('Find Order By Tukang GET /user/order/bytukang/:id', () => {
+  describe('Get Order By Tukang Success', () => {
+    test('Response with order by tukang', async done => {
+      try {
+        const res = await request(app).get(`/user/order/bytukang/${idTukang}` )
+          .set('access_token', access_token)
+        const { body, status } = res
+        expect(status).toBe(200)
+        expect(body[0]).toHaveProperty('_id', expect.any(String))
+        expect(body[0]).toHaveProperty('userId', expect.any(String))
+        expect(body[0]).toHaveProperty('userName', expect.any(String))
+        expect(body[0]).toHaveProperty('tukangId', expect.any(String))
+        expect(body[0]).toHaveProperty('tukangName', expect.any(String))
+        expect(body[0]).toHaveProperty('schedule', expect.any(String))
+        expect(body[0]).toHaveProperty('contact', expect.any(String))
+        expect(body[0]).toHaveProperty('address', expect.any(String))
+        expect(body[0]).toHaveProperty('total_price', expect.any(Number))
+        expect(body[0]).toHaveProperty('comment', expect.any(String))
+        expect(body[0]).toHaveProperty('status', expect.any(String))
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Get Order By Tukang Failed No User Access Token', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).get(`/user/order/bytukang/${idTukang}` )
+          .set('access_token', nouser_access_token)
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Only User')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Get Order By Tukang Failed No Access Token', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).get(`/user/order/bytukang/${idTukang}` )
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Please Login First')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
+  describe('Get Order By Tukang Error Not Found', () => {
+    test('Response with error message', async done => {
+      try {
+        const res = await request(app).get(`/user/order/bytukang/2` )
+          .set('access_token', access_token)
+        const { body, status } = res
+        expect(status).toBe(404)
+        expect(body).toHaveProperty('message', 'Error Not Found')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+})

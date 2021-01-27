@@ -213,7 +213,6 @@ describe('Upload Images Portofolio PUT /tukang/:id/upload', () => {
         .set('access_token', tukang_access_token)
         .set("Content-Type", "multipart/form-data")
         .attach('url', path)
-        .attach('url', path)
       const { body, status } = res
       expect(status).toBe(201)
       done()

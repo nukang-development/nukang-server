@@ -174,7 +174,6 @@ class UserController {
 
   // find order by tukang
   static async findOrderByTukang(req, res, next) {
-    console.log("masuk");
     try {
       if (!Number(req.params.id)) {
         const data = await OrderModel.findAllbyTukang(req.params.id);
